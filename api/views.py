@@ -1,13 +1,19 @@
-from api.models import Human, Family
+from api.models import UserProfile, Family
 from rest_framework import viewsets
-from api.serializers import HumanSerializer, FamilySerializer
+from django.contrib.auth.models import User
+from api.serializers import *
 
 
-class HumanViewSet(viewsets.ModelViewSet):
-    queryset = Human.objects.all().order_by('-lastName')
-    serializer_class = HumanSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.get_all()
+    serializer_class = UserProfileSerializer
 
 
 class FamilyViewSet(viewsets.ModelViewSet):
-    queryset = Family.objects.all().order_by('-name')
+    queryset = Family.get_all().order_by('-name')
     serializer_class = FamilySerializer
