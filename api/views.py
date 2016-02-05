@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from api.authentication import *
 from api.serializers import UserSerializer, UserProfileSerializer, FamilySerializer
 from api.models import UserProfile, Family
+from api.permissions import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -23,7 +24,10 @@ class AuthView(APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    model = User
 
+    def get_permissions(self):
+        return (IsStaffOrTargetUser(),)
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.get_all()
