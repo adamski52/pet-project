@@ -1,82 +1,119 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Family(models.Model):
+    name = models.CharField(
+        max_length = 40)
+
     date_created = models.DateTimeField(
-                    auto_now_add=True)
+        auto_now_add = True)
     
     date_modified = models.DateTimeField(
-                    auto_now=True,
-                    null=True)
+        auto_now = True,
+        null = True)
 
     date_deleted = models.DateTimeField(
-                    null=True)
-
-    name = models.CharField(
-                    max_length=40)
-
-    def __str__(self):
-        return self.name
+        null = True)
 
     def get_all():
-        return Family.objects.filter(date_deleted__isnull=True)
-    
+        return Family.objects.filter(
+            date_deleted__isnull = True)
 
-    def get_choices():
-        return [(family.id, family.name) for family in Family.get_all()]
 
 
 class UserProfile(models.Model):
-    date_created = models.DateTimeField(
-                    auto_now_add=True)
-    
-    date_modified = models.DateTimeField(
-                    auto_now=True,
-                    null=True)
-
-    date_deleted = models.DateTimeField(
-                    null=True)
-
-    user = models.ForeignKey(
-                    User,
-                    on_delete=models.DO_NOTHING)
+    user = models.OneToOneField(
+        User,
+        primary_key = True)
 
     family = models.ForeignKey(
-                    Family,
-                    on_delete=models.DO_NOTHING)
+        Family,
+        null = True)
+
+    date_created = models.DateTimeField(
+        null = True,
+        auto_now_add = True)
+    
+    date_modified = models.DateTimeField(
+        auto_now = True,
+        null = True)
+
+    date_deleted = models.DateTimeField(
+        null = True)
 
     address = models.CharField(
-                    max_length=40)
+        max_length = 40)
 
     address2 = models.CharField(
-                    max_length=40,
-                    null=True)
+        max_length = 40,
+        null = True)
 
     city = models.CharField(
-                    max_length=40)
+        max_length = 40)
 
     state = models.CharField(
-                    max_length=2)
+        max_length = 2)
 
     zip_code = models.CharField(
-                    max_length=10)
+        max_length = 10)
 
     home_phone = models.CharField(
-                    max_length=10,
-                    null=True)
+        max_length = 10,
+        null = True)
 
     cell_phone = models.CharField(
-                    max_length=10,
-                    null=True)
+        max_length = 10,
+        null = True)
 
     gender = models.CharField(
-                    max_length=1)
+        max_length = 1)
+
+    dob = models.DateField(
+        null = True)
 
     def get_all():
-        return UserProfile.objects.filter(date_deleted__isnull=True)
+        return Human.objects.filter(
+            date_deleted__isnull = True)
+
+    def get_by_user(id):
+        return Human.objects.get(
+            user_id = id,
+            date_deleted__isnull = True)
 
 
 
+class Dog(models.Model):
+    family = models.ForeignKey(
+        Family,
+        null = True)
 
+    date_created = models.DateTimeField(
+        auto_now_add = True)
+    
+    date_modified = models.DateTimeField(
+        auto_now = True,
+        null = True)
+
+    date_deleted = models.DateTimeField(
+        null = True)
+
+    name = models.CharField(
+        max_length = 40)
+
+    dob = models.DateField(
+        null = True)
+
+    breed = models.IntegerField()
+
+    weight = models.IntegerField()
+
+    color = models.CharField(
+        max_length = 40)
+
+    gender = models.CharField(
+        max_length = 1)
+
+    def get_all():
+        return Dog.objects.filter(
+            date_deleted__isnull = True)
 

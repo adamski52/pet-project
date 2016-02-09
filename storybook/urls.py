@@ -3,14 +3,13 @@ from rest_framework import routers
 from api import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'userprofiles', views.UserProfileViewSet)
-router.register(r'families', views.FamilyViewSet)
+router.register(r"user", views.UserViewSet, "User")
+router.register(r"family", views.FamilyViewSet, "Family")
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-	url(r'^api/authenticate/$', views.AuthView.as_view(), name='authenticate'),
-    url(r'^api/', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+	url(r"^api/authenticate/$", views.AuthView.as_view(), name="authenticate"),
+    url(r"^api/", include(router.urls)),
+    url(r"^api-auth/", include("rest_framework.urls", namespace="rest_framework"))
 ]
