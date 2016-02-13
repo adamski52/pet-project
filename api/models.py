@@ -20,6 +20,10 @@ class Family(models.Model):
             date_deleted__isnull = True)
 
 
+    def __str__(self):
+        return self.name
+
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -70,15 +74,6 @@ class UserProfile(models.Model):
 
     dob = models.DateField(
         null = True)
-
-    def get_all():
-        return Human.objects.filter(
-            date_deleted__isnull = True)
-
-    def get_by_user(id):
-        return Human.objects.get(
-            user_id = id,
-            date_deleted__isnull = True)
 
 
 

@@ -24,57 +24,26 @@ class AuthView(APIView):
         return Response({})
 
 
-class UserViewSet(
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin, 
-    mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet):
+class UserViewSet(viewsets.ModelViewSet):
 
-    queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def get_permissions(self):
-        if self.request.method == "POST":
-            if self.request.user.is_authenticated():
-                return (IsAdminUser(),)
-            return (AllowAny(),)
-        return (IsAdminOrSelfOrSafe(),)
-
-
-
-class FamilyViewSet(
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin, 
-    mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet):
-
-    serializer_class = FamilySerializer
-
-    def get_permissions(self):
-        user = User.objects.get(
-            id = self.request.user.id)
-
-        if self.request.method == "POST" and user.family is not None:
-            return (IsAdminUser(),)
-
-        return (IsAuthenticated(),)
-
-
+    permission_classes = (OneTimeCreate,)
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return Family.objects.all()
+        if self.request.user.is_authenticated():
+            return User.objects.all()
+        return []
 
 
-        human = Human.get_by_user(self.request.user.id)
+class FamilyViewSet(viewsets.ModelViewSet):
 
-        if human.family is None:
-            return []
+    serializer_class = FamilySerializer
+    permission_classes = (OneToOneCreate,)
 
-        return Family.objects.get(
-            id = human.family)
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            return User.objects.all()
+        return []
 
 
 
