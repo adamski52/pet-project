@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from api.authentication import *
@@ -20,8 +20,18 @@ class AuthView(APIView):
         logout(request)
         return Response({})
 
+class SignUpViewSet(mixins.CreateModelMixin, 
+                    viewsets.GenericViewSet):
+    serializer_class = UserSerializer
+    model = User
 
-class UserViewSet(viewsets.ModelViewSet):
+
+class UserViewSet(mixins.CreateModelMixin, 
+                  mixins.RetrieveModelMixin, 
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  mixins.ListModelMixin,
+                  viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     model = User
@@ -29,11 +39,21 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return (IsStaffOrTargetUser(),)
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class UserProfileViewSet(mixins.CreateModelMixin, 
+                         mixins.RetrieveModelMixin, 
+                         mixins.UpdateModelMixin,
+                         mixins.DestroyModelMixin,
+                         mixins.ListModelMixin,
+                         viewsets.GenericViewSet):
     queryset = UserProfile.get_all()
     serializer_class = UserProfileSerializer
 
 
-class FamilyViewSet(viewsets.ModelViewSet):
+class FamilyViewSet(mixins.CreateModelMixin, 
+                    mixins.RetrieveModelMixin, 
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    mixins.ListModelMixin,
+                    viewsets.GenericViewSet):
     queryset = Family.get_all().order_by('-name')
     serializer_class = FamilySerializer
