@@ -9,7 +9,7 @@ from api.constants.genders import *
 class DogSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         read_only = True,
-        view_name = "dog-detail")
+        view_name = "dogs-detail")
 
     id = serializers.PrimaryKeyRelatedField(
         read_only = True)
@@ -17,11 +17,11 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
     humans = serializers.HyperlinkedRelatedField(
         read_only = True,
         many = True,
-        view_name = "user-detail")
+        view_name = "users-detail")
 
     owner = serializers.HyperlinkedRelatedField(
         read_only = True,
-        view_name = "user-detail")
+        view_name = "users-detail")
 
     name = serializers.CharField()
 
@@ -29,7 +29,7 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
     
     breed = serializers.HyperlinkedRelatedField(
         queryset = Breed.get_all(),
-        view_name = "breed-detail")
+        view_name = "breeds-detail")
     
     weight = serializers.IntegerField()
     

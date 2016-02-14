@@ -8,7 +8,7 @@ from api.constants.genders import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         read_only = True,
-        view_name = "user-detail")
+        view_name = "users-detail")
 
     id = serializers.PrimaryKeyRelatedField(
         read_only = True)
@@ -65,7 +65,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     dogs = serializers.HyperlinkedRelatedField(
         read_only = True,
-        view_name = "dog-detail",
+        view_name = "dogs-detail",
         source = "userprofile.dogs",
         many = True,
         required = False)

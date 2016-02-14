@@ -5,15 +5,20 @@ class OneTimeCreate(permissions.BasePermission):
         if view.action == "destroy":
             return request.user.is_staff
 
-        if view.action == "create" or view.action == "list":
+        if view.action == "create":
             if request.user.is_authenticated():
                 return request.user.is_staff
+
             return True
+
 
         if view.action == "update" or view.action == "partial_update":
             return request.user.is_authenticated()
 
         return True
- 
+
     def has_object_permission(self, request, view, obj):
-        return request.user.is_staff or obj == request.user
+        if request.user.is_staff:
+            return True
+
+        return obj.id == request.user.id
