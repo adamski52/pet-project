@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import UserProfile, Family
+from api.models import *
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -28,6 +28,20 @@ class FamilySerializer(serializers.ModelSerializer):
 
         return family
 
+
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = []
+
+
+
+
+class AuthenticationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("username", "password")
+        extra_kwargs = {"password": {"write_only": True}, "username": {"write_only": True}}
 
 
 
