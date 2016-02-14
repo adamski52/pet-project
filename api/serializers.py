@@ -6,43 +6,50 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login
 from api.constants import CONSTANTS
 
-class BreedSerializer(serializers.ModelSerializer):
+class BreedSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Breed
         fields = ("id", "name")
         read_only_fields = ("id,",)
 
 
-class SessionSerializer(serializers.ModelSerializer):
+class SessionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = []
 
 
-class AuthenticationSerializer(serializers.ModelSerializer):
+class AuthenticationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ("username", "password")
         extra_kwargs = {"password": {"write_only": True}, "username": {"write_only": True}}
 
 
-class DogSerializer(serializers.ModelSerializer):
+class DogSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "dog-detail")
+
     id = serializers.PrimaryKeyRelatedField(
         read_only = True)
 
-    humans = serializers.PrimaryKeyRelatedField(
+    humans = serializers.HyperlinkedRelatedField(
         read_only = True,
-        many = True)
+        many = True,
+        view_name = "user-detail")
 
-    owner = serializers.PrimaryKeyRelatedField(
-        read_only = True)
+    owner = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        view_name = "user-detail")
 
     name = serializers.CharField()
 
     dob = serializers.DateField()
     
-    breed = serializers.PrimaryKeyRelatedField(
-        queryset = Breed.get_all())
+    breed = serializers.HyperlinkedRelatedField(
+        queryset = Breed.get_all(),
+        view_name = "breed-detail")
     
     weight = serializers.IntegerField()
     
@@ -78,15 +85,19 @@ class DogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dog
-        fields = ("id", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans")
-        read_only_fields = ("id", "owner")
+        fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans")
+        read_only_fields = ("id", "url", "owner")
 
 
 
 
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "user-detail")
+
     id = serializers.PrimaryKeyRelatedField(
         read_only = True)
 
@@ -140,8 +151,9 @@ class UserSerializer(serializers.ModelSerializer):
         source = "userprofile.date_modified",
         required = False)
 
-    dogs = serializers.PrimaryKeyRelatedField(
+    dogs = serializers.HyperlinkedRelatedField(
         read_only = True,
+        view_name = "dog-detail",
         source = "userprofile.dogs",
         many = True,
         required = False)
@@ -201,9 +213,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "password", "first_name", "last_name", "dob", "email", "address", "address2", "city", "state", "zip_code", "home_phone", "cell_phone", "gender", "dogs", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
+        fields = ("id", "url", "username", "password", "first_name", "last_name", "dob", "email", "address", "address2", "city", "state", "zip_code", "home_phone", "cell_phone", "gender", "dogs", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
         extra_kwargs = {"password": {"write_only": True}}
-        read_only_fields = ("id", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
+        read_only_fields = ("id", "url", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
 
 
 
