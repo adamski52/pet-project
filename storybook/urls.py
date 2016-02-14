@@ -6,7 +6,8 @@ router = DefaultRouter()
 router.register(r"login", views.LoginViewSet, "Login")
 router.register(r"logout", views.LogoutViewSet, "Logout")
 router.register(r"user", views.UserViewSet, "User")
-router.register(r"family", views.FamilyViewSet, "Family")
+router.register(r"dog", views.DogViewSet, "Dog")
+router.register(r"breed", views.BreedViewSet, "Breed")
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

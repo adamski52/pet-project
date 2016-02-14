@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from api.constants import CONSTANTS
 
-class Family(models.Model):
+class Breed(models.Model):
     name = models.CharField(
         max_length = 40)
 
@@ -16,12 +17,47 @@ class Family(models.Model):
         null = True)
 
     def get_all():
-        return Family.objects.filter(
+        return Breed.objects.filter(
             date_deleted__isnull = True)
 
 
-    def __str__(self):
-        return self.name
+
+
+class Dog(models.Model):
+    date_created = models.DateTimeField(
+        auto_now_add = True)
+    
+    date_modified = models.DateTimeField(
+        auto_now = True,
+        null = True)
+
+    date_deleted = models.DateTimeField(
+        null = True)
+
+    name = models.CharField(
+        max_length = 40)
+
+    dob = models.DateField(
+        null = True)
+
+    breed = models.ForeignKey(
+        Breed)
+
+    weight = models.IntegerField()
+
+    color = models.CharField(
+        max_length = 40)
+
+    gender = models.CharField(
+        max_length = 1,
+        choices = CONSTANTS.GENDERS)
+
+    humans = models.ManyToManyField(
+        User)
+
+    def get_all():
+        return Dog.objects.filter(
+            date_deleted__isnull = True)
 
 
 
@@ -30,9 +66,8 @@ class UserProfile(models.Model):
         User,
         primary_key = True)
 
-    family = models.ForeignKey(
-        Family,
-        null = True)
+    dogs = models.ManyToManyField(
+        Dog)
 
     date_created = models.DateTimeField(
         null = True,
@@ -70,45 +105,12 @@ class UserProfile(models.Model):
         null = True)
 
     gender = models.CharField(
-        max_length = 1)
+        max_length = 1,
+        choices = CONSTANTS.GENDERS)
 
     dob = models.DateField(
         null = True)
 
 
 
-class Dog(models.Model):
-    family = models.ForeignKey(
-        Family,
-        null = True)
-
-    date_created = models.DateTimeField(
-        auto_now_add = True)
-    
-    date_modified = models.DateTimeField(
-        auto_now = True,
-        null = True)
-
-    date_deleted = models.DateTimeField(
-        null = True)
-
-    name = models.CharField(
-        max_length = 40)
-
-    dob = models.DateField(
-        null = True)
-
-    breed = models.IntegerField()
-
-    weight = models.IntegerField()
-
-    color = models.CharField(
-        max_length = 40)
-
-    gender = models.CharField(
-        max_length = 1)
-
-    def get_all():
-        return Dog.objects.filter(
-            date_deleted__isnull = True)
 

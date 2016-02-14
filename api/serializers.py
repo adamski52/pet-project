@@ -4,30 +4,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib.auth import authenticate, login
+from api.constants import CONSTANTS
 
-
-class FamilySerializer(serializers.ModelSerializer):
+class BreedSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Family
-        fields = ("id", "name", "date_created", "date_modified")
-    
-    @transaction.atomic
-    def create(self, validated_data):
+        model = Breed
+        fields = ("id", "name")
+        read_only_fields = ("id",)
 
-        req = self.context['request']
-
-        family = Family.objects.create(
-            name = validated_data['name'])
-
-        user = User.objects.get(
-            id = req.user.id)
-
-        user.family = family
-
-        family.save()
-        user.save()
-
-        return family
+    def __str__(self):
+        return self.name
 
 
 class SessionSerializer(serializers.ModelSerializer):
@@ -41,6 +27,30 @@ class AuthenticationSerializer(serializers.ModelSerializer):
         model = User
         fields = ("username", "password")
         extra_kwargs = {"password": {"write_only": True}, "username": {"write_only": True}}
+
+
+class DogSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    humans = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+        many = True,
+        required = False)
+
+    name = serializers.CharField()
+    dob = serializers.DateField()
+    breed = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+    weight = serializers.IntegerField()
+    color = serializers.CharField()
+    gender = serializers.ChoiceField(
+        choices = CONSTANTS.GENDERS)
+
+    class Meta:
+        model = Dog
+        fields = ("id", "name", "dob", "breed", "weight", "color", "gender", "humans")
+        read_only_fields = ("id",)
 
 
 
@@ -85,13 +95,9 @@ class UserSerializer(serializers.ModelSerializer):
     dob = serializers.DateField(
         source = "userprofile.dob")
 
-    gender = serializers.CharField(
-        source = "userprofile.gender")
-
-    family = serializers.ChoiceField(
-        source = "userprofile.family",
-        choices = Family.get_all(),
-        required = False)
+    gender = serializers.ChoiceField(
+        source = "userprofile.gender",
+        choices = CONSTANTS.GENDERS)
 
     date_created = serializers.DateTimeField(
         read_only = True,
@@ -101,6 +107,12 @@ class UserSerializer(serializers.ModelSerializer):
     date_modified = serializers.DateTimeField(
         read_only = True,
         source = "userprofile.date_modified",
+        required = False)
+
+    dogs = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+        source = "userprofile.dogs",
+        many = True,
         required = False)
 
 
@@ -158,7 +170,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "password", "first_name", "last_name", "dob", "email", "address", "address2", "city", "state", "zip_code", "home_phone", "cell_phone", "gender", "family", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
+        fields = ("id", "username", "password", "first_name", "last_name", "dob", "email", "address", "address2", "city", "state", "zip_code", "home_phone", "cell_phone", "gender", "dogs", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
         extra_kwargs = {"password": {"write_only": True}}
         read_only_fields = ("id", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
 

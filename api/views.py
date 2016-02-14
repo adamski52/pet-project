@@ -35,7 +35,7 @@ class LoginViewSet(mixins.CreateModelMixin,
 
         if user is not None and user.is_active:
             login(request, user)
-            return Response({"session_id": request.session.session_key})
+            return Response({"session_id": request.session.session_key, "id": user.id})
         
         return Response({"detail": "Invalid username/password."}, status=status.HTTP_403_FORBIDDEN)
 
@@ -62,14 +62,13 @@ class UserViewSet(viewsets.ModelViewSet):
         return []
 
 
-class FamilyViewSet(viewsets.ModelViewSet):
-    serializer_class = FamilySerializer
-    permission_classes = (OneToOneCreate,)
-
-    def get_queryset(self):
-        if self.request.user.is_authenticated():
-            return User.objects.all()
-        return []
+class DogViewSet(viewsets.ModelViewSet):
+    serializer_class = DogSerializer
+    queryset = Dog.objects.all()
 
 
+
+class BreedViewSet(viewsets.ModelViewSet):
+    serializer_class = BreedSerializer
+    queryset = Breed.objects.all()
 
