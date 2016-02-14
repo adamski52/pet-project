@@ -64,7 +64,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         source = "userprofile.date_modified",
         required = False)
 
-
     dogs = DogSerializer(
         source = "userprofile.dogs",
         many = True)
