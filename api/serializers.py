@@ -3,6 +3,7 @@ from api.models import *
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.contrib.auth import authenticate, login
 
 
 class FamilySerializer(serializers.ModelSerializer):
@@ -33,8 +34,6 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = []
-
-
 
 
 class AuthenticationSerializer(serializers.ModelSerializer):
@@ -122,6 +121,12 @@ class UserSerializer(serializers.ModelSerializer):
 
         user.save()
         profile.save()
+
+        logged_in_user = authenticate(
+            username = validated_data["username"],
+            password = validated_data["password"])
+
+        login(self.context["request"], logged_in_user)
 
         return user
 
