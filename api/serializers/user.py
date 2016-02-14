@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 
 from api.constants.genders import *
+from api.serializers.dog import *
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
@@ -63,13 +64,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         source = "userprofile.date_modified",
         required = False)
 
-    dogs = serializers.HyperlinkedRelatedField(
-        read_only = True,
-        view_name = "dogs-detail",
-        source = "userprofile.dogs",
-        many = True,
-        required = False)
 
+    dogs = DogSerializer(
+        source = "userprofile.dogs",
+        many = True)
 
     @transaction.atomic
     def create(self, validated_data):
