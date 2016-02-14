@@ -1,97 +1,9 @@
 from rest_framework import serializers
-from api.models import *
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.contrib.auth import authenticate, login
-from api.constants import CONSTANTS
 
-class BreedSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Breed
-        fields = ("id", "name")
-        read_only_fields = ("id,",)
-
-
-class SessionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = []
-
-
-class AuthenticationSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ("username", "password")
-        extra_kwargs = {"password": {"write_only": True}, "username": {"write_only": True}}
-
-
-class DogSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        read_only = True,
-        view_name = "dog-detail")
-
-    id = serializers.PrimaryKeyRelatedField(
-        read_only = True)
-
-    humans = serializers.HyperlinkedRelatedField(
-        read_only = True,
-        many = True,
-        view_name = "user-detail")
-
-    owner = serializers.HyperlinkedRelatedField(
-        read_only = True,
-        view_name = "user-detail")
-
-    name = serializers.CharField()
-
-    dob = serializers.DateField()
-    
-    breed = serializers.HyperlinkedRelatedField(
-        queryset = Breed.get_all(),
-        view_name = "breed-detail")
-    
-    weight = serializers.IntegerField()
-    
-    color = serializers.CharField()
-
-    gender = serializers.ChoiceField(
-        choices = CONSTANTS.GENDERS)
-
-
-    def create(self, validated_data):
-        user = self.context["request"].user
-
-        dog = Dog.objects.create(
-            name = validated_data.get("name", None),
-            breed = validated_data.get("breed", None),
-            dob = validated_data.get("dob", None),
-            weight = validated_data.get("weight", None),
-            color = validated_data.get("color", None),
-            gender = validated_data.get("gender", None),
-            owner = user)
-
-        dog.humans.add(user)
-        dog.save()
-
-        profile = UserProfile.objects.get(
-            user = user)
-
-        profile.dogs.add(dog)
-
-        profile.save()
-
-        return dog
-
-    class Meta:
-        model = Dog
-        fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans")
-        read_only_fields = ("id", "url", "owner")
-
-
-
-
-
+from api.constants.genders import *
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
@@ -139,7 +51,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     gender = serializers.ChoiceField(
         source = "userprofile.gender",
-        choices = CONSTANTS.GENDERS)
+        choices = GENDERS.values)
 
     date_created = serializers.DateTimeField(
         read_only = True,
