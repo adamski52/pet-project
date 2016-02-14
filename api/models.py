@@ -16,6 +16,9 @@ class Breed(models.Model):
     date_deleted = models.DateTimeField(
         null = True)
 
+    def __str__(self):
+        return self.name
+
     def get_all():
         return Breed.objects.filter(
             date_deleted__isnull = True)
@@ -52,6 +55,10 @@ class Dog(models.Model):
         max_length = 1,
         choices = CONSTANTS.GENDERS)
 
+    owner = models.ForeignKey(
+        User,
+        related_name = "owner")
+
     humans = models.ManyToManyField(
         User)
 
@@ -65,7 +72,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         User,
         primary_key = True)
-
+    
     dogs = models.ManyToManyField(
         Dog)
 

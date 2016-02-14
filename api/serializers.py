@@ -10,10 +10,7 @@ class BreedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Breed
         fields = ("id", "name")
-        read_only_fields = ("id",)
-
-    def __str__(self):
-        return self.name
+        read_only_fields = ("id,",)
 
 
 class SessionSerializer(serializers.ModelSerializer):
@@ -35,22 +32,56 @@ class DogSerializer(serializers.ModelSerializer):
 
     humans = serializers.PrimaryKeyRelatedField(
         read_only = True,
-        many = True,
-        required = False)
+        many = True)
+
+    owner = serializers.PrimaryKeyRelatedField(
+        read_only = True)
 
     name = serializers.CharField()
+
     dob = serializers.DateField()
+    
     breed = serializers.PrimaryKeyRelatedField(
-        read_only = True)
+        queryset = Breed.get_all())
+    
     weight = serializers.IntegerField()
+    
     color = serializers.CharField()
+
     gender = serializers.ChoiceField(
         choices = CONSTANTS.GENDERS)
 
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+
+        dog = Dog.objects.create(
+            name = validated_data.get("name", None),
+            breed = validated_data.get("breed", None),
+            dob = validated_data.get("dob", None),
+            weight = validated_data.get("weight", None),
+            color = validated_data.get("color", None),
+            gender = validated_data.get("gender", None),
+            owner = user)
+
+        dog.humans.add(user)
+        dog.save()
+
+        profile = UserProfile.objects.get(
+            user = user)
+
+        profile.dogs.add(dog)
+
+        profile.save()
+
+        return dog
+
     class Meta:
         model = Dog
-        fields = ("id", "name", "dob", "breed", "weight", "color", "gender", "humans")
-        read_only_fields = ("id",)
+        fields = ("id", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans")
+        read_only_fields = ("id", "owner")
+
+
 
 
 
