@@ -1,17 +1,21 @@
 from django.conf.urls import url, include
-from rest_framework import routers
-from api import views
+from rest_framework.routers import DefaultRouter
+from api.views.login import *
+from api.views.logout import *
+from api.views.user import *
+from api.views.dog import *
+from api.views.breed import *
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet, base_name="user")
-router.register(r'signup', views.SignUpViewSet, base_name="signup")
-router.register(r'userprofiles', views.UserProfileViewSet, base_name="profile")
-router.register(r'families', views.FamilyViewSet, base_name="family")
+router = DefaultRouter()
+router.register(r"login", LoginViewSet, "login")
+router.register(r"logout", LogoutViewSet, "logout")
+router.register(r"users", UserViewSet, "users")
+router.register(r"dogs", DogViewSet, "dogs")
+router.register(r"breeds", BreedViewSet, "breeds")
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-	url(r'^api/authenticate/$', views.AuthView.as_view(), name='authenticate'),
-    url(r'^api/', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r"^api/", include(router.urls)),
+    url(r"^api-auth/", include("rest_framework.urls", namespace="rest_framework"))
 ]

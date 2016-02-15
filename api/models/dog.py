@@ -1,0 +1,45 @@
+from django.db import models
+from django.contrib.auth.models import User
+
+from api.models.breed import *
+from api.constants.genders import *
+
+class Dog(models.Model):
+    date_created = models.DateTimeField(
+        auto_now_add = True)
+    
+    date_modified = models.DateTimeField(
+        auto_now = True,
+        null = True)
+
+    date_deleted = models.DateTimeField(
+        null = True)
+
+    name = models.CharField(
+        max_length = 40)
+
+    dob = models.DateField(
+        null = True)
+
+    breed = models.ForeignKey(
+        Breed)
+
+    weight = models.IntegerField()
+
+    color = models.CharField(
+        max_length = 40)
+
+    gender = models.CharField(
+        max_length = 1,
+        choices = GENDERS.values)
+
+    owner = models.ForeignKey(
+        User,
+        related_name = "owner")
+
+    humans = models.ManyToManyField(
+        User)
+
+    def get_all():
+        return Dog.objects.filter(
+            date_deleted__isnull = True)
