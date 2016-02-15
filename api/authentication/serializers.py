@@ -7,3 +7,10 @@ class AuthenticationSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ("username", "password")
         extra_kwargs = {"password": {"write_only": True}, "username": {"write_only": True}}
+
+
+
+class SessionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = []

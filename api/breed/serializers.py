@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models.breed import *
+from .models import Breed
 
 class BreedSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(

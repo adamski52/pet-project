@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from api.serializers.dog import *
-from api.models.dog import *
+from .serializers import DogSerializer
+from .models import Dog
 
 class DogViewSet(viewsets.ModelViewSet):
     serializer_class = DogSerializer

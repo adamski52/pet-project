@@ -3,10 +3,9 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import transaction
 
-from api.fields import *
-from api.models.invite import *
-from api.models.dog import *
-from api.serializers.dog import *
+from api.user.fields import UserFilteredHyperlinkedRelatedField, UserFilteredPrimaryKeyRelatedField
+from .models import Invite
+from api.dog.models import Dog
 
 
 class InviteSerializer(serializers.HyperlinkedModelSerializer):

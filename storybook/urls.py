@@ -1,11 +1,11 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
-from api.views.login import *
-from api.views.logout import *
-from api.views.user import *
-from api.views.dog import *
-from api.views.breed import *
-from api.views.invite import *
+
+from api.authentication.views import LoginViewSet, LogoutViewSet
+from api.user.views import UserViewSet
+from api.dog.views import DogViewSet
+from api.breed.views import BreedViewSet
+from api.invite.views import InviteViewSet
 
 router = DefaultRouter()
 router.register(r"login", LoginViewSet, "login")

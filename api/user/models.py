@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from api.models.dog import *
-from api.constants.genders import *
+from api.dog.models import Dog
+from api.constants import GENDERS
 
 class UserProfile(models.Model):
     user = models.OneToOneField(

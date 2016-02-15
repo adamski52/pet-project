@@ -2,9 +2,9 @@ from rest_framework import viewsets
 from rest_framework import serializers
 from itertools import chain
 
-from api.permissions.isauthenticatedandowner import *
-from api.serializers.invite import *
-from api.models.invite import *
+from api.permissions import IsAuthenticatedAndOwner
+from .serializers import InviteSerializer
+from .models import Invite
 
 class InviteViewSet(viewsets.ModelViewSet):
     serializer_class = InviteSerializer

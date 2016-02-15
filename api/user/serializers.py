@@ -3,8 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
 
-from api.constants.genders import *
-from api.serializers.dog import *
+from api.constants import GENDERS
+from api.dog.serializers import DogSerializer
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(

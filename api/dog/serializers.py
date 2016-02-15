@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from django.db import transaction
 
-from api.models.userprofile import *
-from api.models.breed import *
-from api.models.dog import *
-from api.constants.genders import *
-from api.serializers.breed import *
+from api.user.models import UserProfile
+from .models import Dog
+from api.constants import GENDERS
+from api.breed.serializers import BreedSerializer
 
 class DogSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(

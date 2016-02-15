@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from api.models.breed import *
-from api.constants.genders import *
+from api.breed.models import Breed
+from api.constants import GENDERS
 
 class Dog(models.Model):
     date_created = models.DateTimeField(

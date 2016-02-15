@@ -1,8 +1,8 @@
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
-from api.serializers.authentication import *
+from .serializers import AuthenticationSerializer, SessionSerializer
 
 
 class LoginViewSet(mixins.CreateModelMixin,
@@ -23,3 +23,14 @@ class LoginViewSet(mixins.CreateModelMixin,
             return Response({"session_id": request.session.session_key, "id": user.id})
         
         return Response({"detail": "Invalid username/password."}, status=status.HTTP_403_FORBIDDEN)
+
+
+
+class LogoutViewSet(mixins.CreateModelMixin,
+                    viewsets.GenericViewSet):
+    serializer_class = SessionSerializer
+    queryset = []
+
+    def create(self, request):
+        logout(request)
+        return Response({"detail": "Successfully logged out."})
