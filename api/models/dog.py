@@ -40,6 +40,5 @@ class Dog(models.Model):
     humans = models.ManyToManyField(
         User)
 
-    def get_all():
-        return Dog.objects.filter(
-            date_deleted__isnull = True)
+    def __str__(self):
+        return self.name

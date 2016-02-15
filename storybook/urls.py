@@ -5,6 +5,7 @@ from api.views.logout import *
 from api.views.user import *
 from api.views.dog import *
 from api.views.breed import *
+from api.views.invite import *
 
 router = DefaultRouter()
 router.register(r"login", LoginViewSet, "login")
@@ -12,6 +13,8 @@ router.register(r"logout", LogoutViewSet, "logout")
 router.register(r"users", UserViewSet, "users")
 router.register(r"dogs", DogViewSet, "dogs")
 router.register(r"breeds", BreedViewSet, "breeds")
+router.register(r"invites", InviteViewSet, "invites")
+
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
