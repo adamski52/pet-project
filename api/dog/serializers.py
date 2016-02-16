@@ -5,6 +5,7 @@ from api.user.models import UserProfile
 from .models import Dog
 from api.constants import GENDERS
 from api.breed.serializers import BreedSerializer
+from api.breed.models import Breed
 
 class DogSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
@@ -27,7 +28,10 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
 
     dob = serializers.DateField()
     
-    breed = BreedSerializer()
+    #breed = BreedSerializer()
+    breed = serializers.HyperlinkedRelatedField(
+        queryset = Breed.objects,
+        view_name = "breeds-detail")
     
     weight = serializers.IntegerField()
     

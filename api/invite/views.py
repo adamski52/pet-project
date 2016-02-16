@@ -2,18 +2,27 @@ from rest_framework import viewsets
 from rest_framework import serializers
 from itertools import chain
 
-from api.permissions import IsAuthenticatedAndOwner
-from .serializers import InviteSerializer
+from api.permissions import IsSenderOrReceiver
+from .serializers import InviteSerializer, SenderSerializer, RecipientSerializer
 from .models import Invite
 
+
 class InviteViewSet(viewsets.ModelViewSet):
-    serializer_class = InviteSerializer
-    permission_classes = (IsAuthenticatedAndOwner,)
+    permission_classes = (IsSenderOrReceiver,)
 
     def perform_create(self, serializer):        
         serializer.save(
             sender = self.request.user)
 
+    def get_serializer_class(self):
+        
+        if self.request.method == "PUT":
+            return RecipientSerializer
+
+        if self.request.method == "DELETE":
+            return SenderSerializer
+
+        return InviteSerializer
 
     def get_queryset(self):
         if self.request.user.is_staff:

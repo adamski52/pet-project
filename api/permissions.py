@@ -1,5 +1,27 @@
 from rest_framework import permissions
 
+
+class IsSenderOrReceiver(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated()
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff:
+            return True
+
+        if view.action == "destroy":
+            return obj.sender_id == request.user.id
+
+        if view.action == "update":
+            return obj.recipient_email == request.user.email
+
+
+        if view.action == "retrieve":
+            return obj.sender_id == request.user.id or obj.recipient_email == request.user.email
+
+        return False
+
+
 class IsAuthenticatedAndOwner(permissions.BasePermission):
     def has_permission(self, request, view):        
         if view.action == "destroy":

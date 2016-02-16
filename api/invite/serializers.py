@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import transaction
 
-from api.user.fields import UserFilteredHyperlinkedRelatedField, UserFilteredPrimaryKeyRelatedField
+from api.invite.fields import SenderHyperlinkedRelatedField, RecipientHyperlinkedRelatedField
 from .models import Invite
 from api.dog.models import Dog
 
@@ -20,23 +20,38 @@ class InviteSerializer(serializers.HyperlinkedModelSerializer):
         read_only = True,
         view_name = "users-detail")
 
-    recipient_email = serializers.EmailField()
-
-    
-    dogs = UserFilteredHyperlinkedRelatedField(
-        many = True,
+    dog = SenderHyperlinkedRelatedField(
         queryset = Dog.objects,
         view_name = "dogs-detail")
 
-    """
-    dogs = UserFilteredPrimaryKeyRelatedField(
-        many = True,
-        queryset = Dog.objects)
-    """
-
     class Meta:
         model = Invite
-        fields = ("id", "url", "sender", "status", "recipient_email", "dogs", "date_created", "date_modified", "date_deleted", "date_expires")
+        fields = ("id", "url", "sender", "status", "recipient_email", "dog", "date_created", "date_modified", "date_deleted", "date_expires")
         read_only_fields = ("id", "url", "sender", "status", "date_created", "date_modified", "date_deleted", "date_expires")
 
 
+
+class SenderSerializer(InviteSerializer):
+
+    status = serializers.ChoiceField(
+        choices = (True, False))
+
+    class Meta:
+        model = Invite
+        fields = ("id", "url", "sender", "status", "recipient_email", "dog", "date_created", "date_modified", "date_deleted", "date_expires")
+        read_only_fields = ("id", "url", "sender", "status", "recipient_email", "date_created", "date_modified", "date_deleted", "date_expires")
+
+
+class RecipientSerializer(InviteSerializer):
+
+    status = serializers.ChoiceField(
+        choices = (True, False))
+
+    dog = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        view_name = "dogs-detail")
+
+    class Meta:
+        model = Invite
+        fields = ("id", "url", "sender", "status", "recipient_email", "dog", "date_created", "date_modified", "date_deleted", "date_expires")
+        read_only_fields = ("id", "url", "sender", "recipient_email", "dog", "date_created", "date_modified", "date_deleted", "date_expires")

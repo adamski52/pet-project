@@ -18,11 +18,11 @@ class Invite(models.Model):
             status__isnull = True)
 
     def get_sent(self):
-        return Invite.objects.filter(
+        return Invite.get_all(self).filter(
             sender = self.request.user)
 
     def get_received(self):        
-        return Invite.objects.filter(
+        return Invite.get_all(self).filter(
             recipient_email = self.request.user.email)
 
 
@@ -33,8 +33,13 @@ class Invite(models.Model):
     sender = models.ForeignKey(
         User)
 
+    dog = models.ForeignKey(
+        Dog)
+
+    """
     dogs = models.ManyToManyField(
         Dog)
+    """
 
     recipient_email = models.EmailField()
 

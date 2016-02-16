@@ -2,7 +2,10 @@ from rest_framework import serializers
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.contrib.auth import authenticate, login
 
+
+from .models import UserProfile
 from api.constants import GENDERS
 from api.dog.serializers import DogSerializer
 
@@ -66,6 +69,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     dogs = DogSerializer(
         source = "userprofile.dogs",
+        read_only = True,
         many = True)
 
     @transaction.atomic
@@ -124,7 +128,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ("id", "url", "username", "password", "first_name", "last_name", "dob", "email", "address", "address2", "city", "state", "zip_code", "home_phone", "cell_phone", "gender", "dogs", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
         extra_kwargs = {"password": {"write_only": True}}
-        read_only_fields = ("id", "url", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
+        read_only_fields = ("id", "url", "dogs", "is_staff", "is_superuser", "is_active", "date_created", "date_modified")
 
 
 
