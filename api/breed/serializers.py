@@ -12,4 +12,4 @@ class BreedSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Breed
         fields = ("id", "url", "name")
-        read_only_fields = ("url",)
+        read_only_fields = ("id", "url")

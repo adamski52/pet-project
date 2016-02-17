@@ -54,7 +54,7 @@ function install_virtualenv {
     virtualenv ~/Projects/env
 
     # start using that virtual env
-    #source  ~/Projects/env/bin/activate
+    source  ~/Projects/env/bin/activate
 }
 
 
@@ -76,6 +76,11 @@ function install_mysql {
     brew install mysql
 }
 
+function install_safe_delete {
+    pip3 install django-safedelete
+}
+
+
 function install_mysqlclient {
     #un and reinstall mysqlclient.  make sure you're in the virtualenv
     #/usr/bin/yes | pip3 uninstall mysqlclient
@@ -89,7 +94,8 @@ function setup_database {
 
 function sync_database {
    # migrate and runsync
-   python storybook/manage.py migrate --run-syncdb
+   python3 manage.py makemigrations api
+   python3 manage.py migrate 
 }
 
 function do_work {
@@ -117,6 +123,8 @@ function do_work {
     confirm "(Re)installation of django" install_django
 
     confirm "(Re)installation of djangorestframework" install_drf
+
+    confirm "(Re)installation of django-safedelete" install_safe_delete
 
     confirm "Migration and sync of database" sync_database
 

@@ -5,6 +5,11 @@ from .serializers import BreedSerializer
 from .models import Breed
 
 class BreedViewSet(viewsets.ModelViewSet):
-    queryset = Breed.objects.active()
     permission_classes = (IsAuthenticated,)
     serializer_class = BreedSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Breed.objects.all()
+
+        return Breed.objects.active()

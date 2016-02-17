@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import datetime
+
 
 class ActiveManager(models.Manager):
     def active(self):
@@ -17,6 +19,13 @@ class BaseModel(models.Model):
 
     date_deleted = models.DateTimeField(
         null = True)
+
+    def delete(self, *args, **kwargs):
+        #super(BaseModel, self).delete(*args, **kwargs)
+        self.date_deleted = datetime.now()
+        self.save()
+        return self
+        
 
 
     class Meta:
