@@ -10,7 +10,7 @@ class DogViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return Dog.get_all()
+            return Dog.objects.all()
 
-        return Dog.objects.filter(
+        return Dog.objects.active().filter(
             owner = self.request.user)

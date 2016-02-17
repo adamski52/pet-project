@@ -29,10 +29,10 @@ class InviteViewSet(viewsets.ModelViewSet):
             return Invite.objects.all()
 
         if self.action == "list":
-            sent = Invite.get_sent(self)
-            received = Invite.get_received(self)
+            sent = Invite.objects.sent(self.request.user)
+            received = Invite.objects.received(self.request.user)
 
             return list(chain(sent, received))
 
-        return Invite.get_all(self)
+        return Invite.objects.active()
 

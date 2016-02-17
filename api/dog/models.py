@@ -1,20 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from api.models import BaseModel
 from api.breed.models import Breed
 from api.constants import GENDERS
 
-class Dog(models.Model):
-    date_created = models.DateTimeField(
-        auto_now_add = True)
-    
-    date_modified = models.DateTimeField(
-        auto_now = True,
-        null = True)
-
-    date_deleted = models.DateTimeField(
-        null = True)
-
+class Dog(BaseModel):
     name = models.CharField(
         max_length = 40)
 

@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import transaction
 
-from api.invite.fields import SenderHyperlinkedRelatedField, RecipientHyperlinkedRelatedField
+from api.invite.fields import SenderHyperlinkedRelatedField
 from .models import Invite
 from api.dog.models import Dog
 

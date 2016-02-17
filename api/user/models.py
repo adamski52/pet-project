@@ -1,27 +1,17 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
+from api.models import BaseModel
 from api.dog.models import Dog
 from api.constants import GENDERS
 
-class UserProfile(models.Model):
+class UserProfile(BaseModel):
     user = models.OneToOneField(
         User,
         primary_key = True)
     
     dogs = models.ManyToManyField(
         Dog)
-
-    date_created = models.DateTimeField(
-        null = True,
-        auto_now_add = True)
-    
-    date_modified = models.DateTimeField(
-        auto_now = True,
-        null = True)
-
-    date_deleted = models.DateTimeField(
-        null = True)
 
     address = models.CharField(
         max_length = 40)

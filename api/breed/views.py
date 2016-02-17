@@ -5,6 +5,6 @@ from .serializers import BreedSerializer
 from .models import Breed
 
 class BreedViewSet(viewsets.ModelViewSet):
-    serializer_class = BreedSerializer
-    queryset = Breed.get_all()
+    queryset = Breed.objects.active()
     permission_classes = (IsAuthenticated,)
+    serializer_class = BreedSerializer

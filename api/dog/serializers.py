@@ -30,7 +30,7 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
     
     #breed = BreedSerializer()
     breed = serializers.HyperlinkedRelatedField(
-        queryset = Breed.objects,
+        queryset = Breed.objects.active(),
         view_name = "breeds-detail")
     
     weight = serializers.IntegerField()
