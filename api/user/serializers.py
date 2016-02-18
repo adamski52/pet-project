@@ -71,6 +71,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         source = "userprofile.dogs",
         read_only = True,
         many = True)
+    
 
     @transaction.atomic
     def create(self, validated_data):

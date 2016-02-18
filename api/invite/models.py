@@ -7,18 +7,18 @@ from api.models import BaseModel, ActiveManager
 from api.dog.models import Dog
 
 class InviteManager(ActiveManager):
-    def active(self):
-        return super(InviteManager, self).active().filter(
+    def get_queryset(self):
+        return super(InviteManager, self).get_queryset().filter(
             date_expires__gt = datetime.now()).filter(
             status__isnull = True)
 
     def sent(self, user):
-        return active(self).filter(
+        return self.get_queryset().filter(
             sender = user)
 
     def received(self, user):
-        return active(self).filter(
-            recipient_email = user)
+        return self.get_queryset().filter(
+            recipient_email = user.email)
 
 
 

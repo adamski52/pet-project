@@ -28,9 +28,8 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
 
     dob = serializers.DateField()
     
-    #breed = BreedSerializer()
     breed = serializers.HyperlinkedRelatedField(
-        queryset = Breed.objects.active(),
+        queryset = Breed.objects,
         view_name = "breeds-detail")
     
     weight = serializers.IntegerField()
@@ -53,7 +52,7 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
             gender = validated_data.get("gender", None),
             owner = user)
 
-        #dog.humans.add(user)
+        dog.humans.add(user)
         dog.save()
 
         profile = UserProfile.objects.get(

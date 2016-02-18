@@ -10,6 +10,6 @@ class BreedViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return Breed.objects.all()
+            return Breed.admin_objects.all()
 
-        return Breed.objects.active()
+        return Breed.objects.all()

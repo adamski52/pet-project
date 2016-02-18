@@ -56,12 +56,20 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+EMAIL_HOST = 'mail.jonathanadamski.com'
+EMAIL_HOST_USER = 'noreply@jonathanadamski.com'
+EMAIL_HOST_PASSWORD = 'notreal'
+DEFAULT_FROM_EMAIL = 'noreply@jonathanadamski.com'
+SERVER_EMAIL = 'noreply@jonathanadamski.com'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+
 ROOT_URLCONF = 'storybook.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/Users/jon/Projects/storybook/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

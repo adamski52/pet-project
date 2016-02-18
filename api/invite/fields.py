@@ -7,5 +7,5 @@ class SenderHyperlinkedRelatedField(serializers.HyperlinkedRelatedField):
         queryset = super(SenderHyperlinkedRelatedField, self).get_queryset()
         if not request or not queryset:
             return None
-        return queryset.active().filter(
+        return queryset.filter(
             owner = request.user)

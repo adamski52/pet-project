@@ -1,21 +1,18 @@
 from rest_framework import viewsets
 from rest_framework import serializers
 from itertools import chain
+from django.db import transaction
 
 from api.permissions import IsSenderOrReceiver
 from .serializers import InviteSerializer, SenderSerializer, RecipientSerializer
 from .models import Invite
+from api.dog.models import Dog
 
 
 class InviteViewSet(viewsets.ModelViewSet):
     permission_classes = (IsSenderOrReceiver,)
-
-    def perform_create(self, serializer):        
-        serializer.save(
-            sender = self.request.user)
-
+    
     def get_serializer_class(self):
-        
         if self.request.method == "PUT":
             return RecipientSerializer
 
@@ -26,7 +23,7 @@ class InviteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return Invite.objects.all()
+            return Invite.admin_objects.all()
 
         if self.action == "list":
             sent = Invite.objects.sent(self.request.user)
@@ -34,5 +31,5 @@ class InviteViewSet(viewsets.ModelViewSet):
 
             return list(chain(sent, received))
 
-        return Invite.objects.active()
+        return Invite.objects.all()
 
