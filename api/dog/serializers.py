@@ -27,11 +27,14 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
     name = serializers.CharField()
 
     dob = serializers.DateField()
-    
+
+    #breed = BreedSerializer(Breed)
+
     breed = serializers.HyperlinkedRelatedField(
         queryset = Breed.objects,
         view_name = "breeds-detail")
-    
+
+
     weight = serializers.IntegerField()
     
     color = serializers.CharField()
@@ -67,4 +70,4 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Dog
         fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans")
-        read_only_fields = ("id", "url", "owner")
+        read_only_fields = ("id", "url", "owner", "breed")
