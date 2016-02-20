@@ -21,9 +21,10 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
         read_only = True)
 
     properties = RoomPropertySerializer(
-        read_only = True)
+        read_only = True,
+        many = True)
 
     class Meta:
         model = Room
-        fields = ("id", "url", "name", "width", "depth", "properties")
-        read_only_fields = ("id", "url", "properties")
+        fields = ("id", "url", "name", "properties")
+        read_only_fields = ("id", "url")

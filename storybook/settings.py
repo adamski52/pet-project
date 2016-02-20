@@ -56,13 +56,13 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-EMAIL_HOST = 'mail.jonathanadamski.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.jonathanadamski.com'
 EMAIL_HOST_USER = 'noreply@jonathanadamski.com'
 EMAIL_HOST_PASSWORD = 'notreal'
-DEFAULT_FROM_EMAIL = 'noreply@jonathanadamski.com'
-SERVER_EMAIL = 'noreply@jonathanadamski.com'
-EMAIL_PORT = 25
-EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ROOT_URLCONF = 'storybook.urls'
 

@@ -1,0 +1,9 @@
+Hello!
+
+{{sender_first_name}} {{sender_last_name}} ({{sender_email}}) wants you to have an extra wet nose or two in your life. {{sender_first_name}} has invited you to be a guardian of {{sender_dogs}}.
+
+If you accept, you will be able to schedule appointments and provide information regarding shots, medications and preferences on behalf of these furry friends.
+
+To accept or decline this invitation, visit Storybook Kennels at http://localhost:8000/api/invites/.  If you do not yet have an account, you can create one for free by visiting http://localhost:8000/api/users/.
+
+If you received this email in error, or if you wish to stop receiving such emails, you can remove yourself from the list of valid recipients even if you do not have an account by visiting http://localhost:8000/api/opt-out/{{invite_id}}/.

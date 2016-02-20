@@ -1,6 +1,8 @@
-#full of hate
+# full of hate
 *.sublime-*
 *.DS_Store
+fixtures/
+migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

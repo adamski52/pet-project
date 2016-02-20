@@ -40,10 +40,8 @@ class Invite(BaseModel):
     dog = models.ForeignKey(
         Dog)
 
-    """
-    dogs = models.ManyToManyField(
-        Dog)
-    """
+    processed = models.BooleanField(
+        default = False)
 
     recipient_email = models.EmailField()
 

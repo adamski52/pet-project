@@ -6,8 +6,8 @@ from api.user.views import UserViewSet
 from api.dog.views import DogViewSet
 from api.breed.views import BreedViewSet
 from api.invite.views import InviteViewSet
-from api.room.views import RoomViewSet
-from api.appointment.views import AppointmentViewSet
+from api.room.views import RoomViewSet, RoomPropertyViewSet
+from api.appointment.views import AppointmentViewSet, AppointmentPropertyViewSet
 
 router = DefaultRouter()
 router.register(r"login", LoginViewSet, "login")
@@ -17,7 +17,9 @@ router.register(r"dogs", DogViewSet, "dogs")
 router.register(r"breeds", BreedViewSet, "breeds")
 router.register(r"invites", InviteViewSet, "invites")
 router.register(r"rooms", RoomViewSet, "rooms")
+router.register(r"roomproperties", RoomPropertyViewSet, "roomproperties")
 router.register(r"appointments", AppointmentViewSet, "appointments")
+router.register(r"appointmentproperties", AppointmentPropertyViewSet, "appointmentpropertiess")
 
 
 # Wire up our API using automatic URL routing.

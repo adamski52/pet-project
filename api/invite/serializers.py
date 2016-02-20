@@ -30,27 +30,17 @@ class InviteSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-
     @transaction.atomic
     def create(self, validated_data):
         user = self.context.get("request").user
         dog = validated_data.get("dog", None)
         recipient = validated_data.get("recipient_email", None)
 
-        text_message = render_to_string("templates/template.txt", {"user": user, "dog": dog})
-        html_message = render_to_string("templates/template.html", {"user": user, "dog": dog})
-
+        
         invite = Invite.objects.create(
             sender = user,
             recipient_email = recipient,
             dog = dog)
-
-        send_mail(
-            "Storybook Kennels Invite",
-            text_message,
-            user.email,
-            [recipient],
-            html_message = html_message)
 
         return invite
 
