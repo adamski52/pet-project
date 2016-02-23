@@ -4,16 +4,7 @@ from django.contrib.auth.models import User
 from api.models import BaseModel
 from api.dog.models import Dog
 from api.room.models import Room
-
-
-class AppointmentProperty(BaseModel):
-    property_name = models.CharField(
-        unique = True,
-        max_length = 40)
-
-    property_value = models.CharField(
-        max_length = 40)
-
+from api.generic.models import Property
 
 class Appointment(BaseModel):
     scheduled_by = models.ForeignKey(
@@ -30,6 +21,6 @@ class Appointment(BaseModel):
         Room)
 
     properties = models.ManyToManyField(
-        AppointmentProperty)
+        Property)
 
     

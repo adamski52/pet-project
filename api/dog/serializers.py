@@ -56,7 +56,7 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
             owner = user)
 
         dog.humans.add(user)
-        dog.save()
+        #dog.save()
 
         profile = UserProfile.objects.get(
             user = user)

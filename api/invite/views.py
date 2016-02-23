@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework import serializers
 from itertools import chain
 from django.db import transaction
+from rest_framework_extensions.mixins import NestedViewSetMixin
+
 
 from api.permissions import IsSenderOrReceiver
 from .serializers import InviteSerializer, SenderSerializer, RecipientSerializer
@@ -9,7 +11,7 @@ from .models import Invite
 from api.dog.models import Dog
 
 
-class InviteViewSet(viewsets.ModelViewSet):
+class InviteViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsSenderOrReceiver,)
     
     def get_serializer_class(self):

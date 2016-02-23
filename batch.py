@@ -183,6 +183,26 @@ def invites():
 
             emails[recipient_email][id]["sender_dogs"].append(invite.dog.name)
 
+
+    """
+    will now have a data structure like
+    {
+      "1": {
+        "don.johnson@internet.com": {
+          "invite_id": "UUID",
+          "sender_first_name": "kevin",
+          "sender_last_name": "shreve",
+          "sender_email": "kevin.shreve@lol.com",
+          "sender_dogs": ["xzibit"]
+        },
+        ...
+      }
+    }
+
+    where "1" is the unique user ID of the sending user.
+    """
+
+
             
 
     # send em off
@@ -195,10 +215,6 @@ def invites():
         else:
             original_dogs = context[0]["sender_dogs"]
             sender_dogs = ""
-            for dog in original_dogs[:-1]:
-                sender_dogs += dog + ", " 
-            sender_dogs += " and " + original_dogs[-1]
-
             sender_dogs = sender_dogs.replace(", and ", " and ")
 
             context[0]["sender_dogs"] = sender_dogs

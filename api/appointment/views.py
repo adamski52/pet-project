@@ -1,23 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from .serializers import AppointmentSerializer, AppointmentPropertySerializer
-from .models import Appointment, AppointmentProperty
-
-
-class AppointmentPropertyViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = AppointmentPropertySerializer
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return AppointmentProperty.admin_objects.all()
-
-        return AppointmentProperty.objects.all()
+from .serializers import AppointmentSerializer
+from .models import Appointment
 
 
-
-class AppointmentViewSet(viewsets.ModelViewSet):
+class AppointmentViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = AppointmentSerializer
 

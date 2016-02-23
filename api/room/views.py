@@ -1,23 +1,14 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from .serializers import RoomSerializer, RoomPropertySerializer
+
+from .serializers import RoomSerializer
 from .models import Room
+from api.permissions import PublicReadAdminWrite
 
 
-class RoomPropertyViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = RoomPropertySerializer
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Room.admin_objects.all()
-
-        return Room.objects.all()
-
-
-class RoomViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+class RoomViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (PublicReadAdminWrite,)
     serializer_class = RoomSerializer
 
     def get_queryset(self):

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User 
 
 
 class AdminManager(models.Manager):
@@ -25,13 +26,10 @@ class BaseModel(models.Model):
     date_deleted = models.DateTimeField(
         null = True)
 
-
-
     def delete(self, *args, **kwargs):
         self.date_deleted = datetime.now()
         self.save()
         return self
-        
 
 
     class Meta:

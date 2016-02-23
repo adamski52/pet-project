@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from itertools import chain
-
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from api.permissions import DogPermissions
 from api.user.models import UserProfile
 from .serializers import DogSerializer
 from .models import Dog
 
-class DogViewSet(viewsets.ModelViewSet):
+class DogViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = DogSerializer
     permission_classes = (DogPermissions,)
 
@@ -20,7 +20,5 @@ class DogViewSet(viewsets.ModelViewSet):
 
         dogs = Dog.objects.filter(
             id__in = profile.dogs.values_list("id", flat = True))
-
-
 
         return dogs

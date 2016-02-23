@@ -1,14 +1,25 @@
 from rest_framework import serializers
+from api.generic.serializers import PropertySerializer
+from api.generic.models import Property
 from .models import Room, RoomProperty
 
-class RoomPropertySerializer(serializers.HyperlinkedModelSerializer):
-    property_name = serializers.CharField()
-    property_value = serializers.CharField()
+
+class RoomPropertySerializer(serializers.ModelSerializer):
+    property = serializers.PrimaryKeyRelatedField(
+        queryset = Property.objects.all())
+
+    value = serializers.CharField()
+
+    name = serializers.ReadOnlyField(
+        source = "property.name")
+
+    format = serializers.ReadOnlyField(
+        source = "property.format.name")
 
     class Meta:
         model = RoomProperty
-        fields = ("id", "url", "property_name", "property_value")
-        read_only_fields = ("id", "url")
+        fields = ("property", "value", "name", "format")
+        read_only_fields = ("format", "name")
 
 
 
@@ -21,10 +32,47 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
         read_only = True)
 
     properties = RoomPropertySerializer(
-        read_only = True,
         many = True)
+
+    def create(self, validated_data):
+        room = Room.objects.create(
+            name = validated_data.get("name", None))
+
+
+        for prop in validated_data.get("properties", None):
+            room_property = RoomProperty.objects.create(
+                property = prop.get("property", None),
+                value = prop.get("value", None))
+
+            room.properties.add(room_property)
+
+        return room
+
+
+    def update(self, instance, validated_data):
+        room = Room.objects.get(
+            id = instance.id)
+
+        RoomProperty.objects.filter(
+            room = room).delete()
+
+        room.name = validated_data.get("name", None)
+        room.properties = []
+
+        for prop in validated_data.get("properties", None):
+            room_property = RoomProperty.objects.create(
+                property = prop.get("property", None),
+                value = prop.get("value", None))
+
+            room.properties.add(room_property)
+
+        room.save()
+
+        return room
+
 
     class Meta:
         model = Room
         fields = ("id", "url", "name", "properties")
         read_only_fields = ("id", "url")
+
