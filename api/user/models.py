@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from api.models import BaseModel
+from api.generic.models import BaseModel
 from api.dog.models import Dog
 from api.constants import GENDERS
 

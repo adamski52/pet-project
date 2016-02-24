@@ -9,6 +9,29 @@ from .models import UserProfile
 from api.constants import GENDERS
 from api.dog.serializers import DogSerializer
 
+
+class UserShallowSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "users-detail")
+
+    id = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    first_name = serializers.CharField()
+
+    last_name = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ("id", "url", "username", "first_name", "last_name")
+        read_only_fields = ("id", "url", "username", "first_name", "last_name")
+
+
+
+
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         read_only = True,

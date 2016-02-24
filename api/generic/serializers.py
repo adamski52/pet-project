@@ -36,3 +36,19 @@ class PropertySerializer(serializers.HyperlinkedModelSerializer):
         fields = ("id", "url", "name", "format")
         read_only_fields = ("id", "url")
 
+
+
+class PropertyGetSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    name = serializers.CharField()
+
+    format = serializers.CharField(
+        source = "format.name")
+
+    class Meta:
+        model = Property
+        fields = ("id", "name", "format")
+        read_only_fields = ("id",)
+

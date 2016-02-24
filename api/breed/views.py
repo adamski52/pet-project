@@ -1,13 +1,14 @@
-from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from .serializers import BreedSerializer
 from .models import Breed
+from api.generic.views import BaseViewSet
 
-class BreedViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class BreedViewSet(BaseViewSet):
     permission_classes = (IsAuthenticated,)
-    serializer_class = BreedSerializer
+    serializers = {
+        "default": BreedSerializer
+    }
 
     def get_queryset(self):
         if self.request.user.is_staff:

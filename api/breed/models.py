@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.models import BaseModel
+from api.generic.models import BaseModel
 
 class Breed(BaseModel):
     name = models.CharField(

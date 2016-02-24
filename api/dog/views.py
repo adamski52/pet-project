@@ -1,15 +1,14 @@
-from rest_framework import viewsets
-from itertools import chain
-from rest_framework_extensions.mixins import NestedViewSetMixin
-
 from api.permissions import DogPermissions
 from api.user.models import UserProfile
+from api.generic.views import BaseViewSet
 from .serializers import DogSerializer
 from .models import Dog
 
-class DogViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    serializer_class = DogSerializer
+class DogViewSet(BaseViewSet):
     permission_classes = (DogPermissions,)
+    serializers = {
+        "default": DogSerializer
+    }
 
     def get_queryset(self):
         if self.request.user.is_staff:

@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 
-from api.models import BaseModel, ActiveManager
+from api.generic.models import BaseModel, ActiveManager
 from api.dog.models import Dog
 
 class InviteManager(ActiveManager):

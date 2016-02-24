@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 
 from .serializers import AuthenticationSerializer, SessionSerializer
 
-
 class LoginViewSet(mixins.CreateModelMixin,
                    viewsets.GenericViewSet):
     serializer_class = AuthenticationSerializer

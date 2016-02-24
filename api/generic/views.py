@@ -1,13 +1,25 @@
 from rest_framework import viewsets
-from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from .serializers import FormatSerializer, PropertySerializer
+from .serializers import FormatSerializer, PropertySerializer, PropertyGetSerializer
 from .models import Format, Property
 from api.permissions import PublicReadAdminWrite
 
-class FormatViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class BaseViewSet(viewsets.ModelViewSet):
+    serializers = { 
+        "default": None,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers.get(
+            self.request.method,
+            self.serializers["default"])
+
+
+class FormatViewSet(BaseViewSet):
     permission_classes = (PublicReadAdminWrite,)
-    serializer_class = FormatSerializer
+    serializers = {
+        "default": FormatSerializer
+    }
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -16,14 +28,15 @@ class FormatViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Format.objects.all()
 
 
-
-class PropertyViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class PropertyViewSet(BaseViewSet):
     permission_classes = (PublicReadAdminWrite,)
-    serializer_class = PropertySerializer
+    serializers = {
+        "default": PropertySerializer,
+        "GET": PropertyGetSerializer
+    }
 
     def get_queryset(self):
         if self.request.user.is_staff:
             return Property.admin_objects.all()
 
         return Property.objects.all()
-

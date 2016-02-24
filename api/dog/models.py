@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from api.models import BaseModel
+from api.generic.models import BaseModel
 from api.breed.models import Breed
 from api.constants import GENDERS
 
@@ -32,4 +32,4 @@ class Dog(BaseModel):
         User)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.owner.first_name + " " + self.owner.last_name + "'s)"

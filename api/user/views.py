@@ -1,12 +1,15 @@
-from rest_framework import viewsets
 from django.contrib.auth.models import User
-from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from .serializers import UserSerializer
 from api.permissions import OneTimeCreate
+from api.generic.views import BaseViewSet
 
-class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    serializer_class = UserSerializer
+
+class UserViewSet(BaseViewSet):
+    serializers = {
+        "default": UserSerializer
+    }
+    
     permission_classes = (OneTimeCreate,)
 
     def get_queryset(self):        

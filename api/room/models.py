@@ -1,7 +1,6 @@
 from django.db import models
 
-from api.models import BaseModel
-from api.generic.models import Property
+from api.generic.models import BaseModel, Property
 
 
 class RoomProperty(BaseModel):
@@ -20,5 +19,9 @@ class Room(BaseModel):
     properties = models.ManyToManyField(
         RoomProperty,
         null = True)
+
+
+    def __str__(self):
+        return self.name
 
     
