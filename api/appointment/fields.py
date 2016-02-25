@@ -2,6 +2,7 @@ from rest_framework import serializers
 from api.user.models import UserProfile
 from api.dog.models import Dog
 
+
 class ScheduledForHyperlinkedRelatedField(serializers.HyperlinkedRelatedField):
     def get_queryset(self):
         request = self.context.get("request", None)
