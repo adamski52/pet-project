@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Format, Property
+from .models import Format, Property, Attachment, Image
 
 class FormatSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
@@ -16,6 +16,45 @@ class FormatSerializer(serializers.HyperlinkedModelSerializer):
         fields = ("id", "url", "name")
         read_only_fields = ("id", "url")
 
+
+
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "attachments-detail")
+
+    name = serializers.CharField()
+
+    file = serializers.ImageField()
+
+    class Meta:
+        model = Image,
+        fields = ("id", "url", "name", "file")
+        read_only_fields = ("id", "url")
+
+
+
+
+
+class AttachmentSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "attachments-detail")
+
+    name = serializers.CharField()
+
+    file = serializers.FileField()
+
+    class Meta:
+        model = Attachment,
+        fields = ("id", "url", "name", "file")
+        read_only_fields = ("id", "url")
 
 
 class PropertySerializer(serializers.HyperlinkedModelSerializer):

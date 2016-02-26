@@ -1,6 +1,7 @@
 from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser
 
-from .serializers import FormatSerializer, PropertySerializer, PropertyGetSerializer
+from .serializers import FormatSerializer, PropertySerializer, PropertyGetSerializer, AttachmentSerializer, ImageSerializer
 from .models import Format, Property
 from api.permissions import PublicReadAdminWrite
 
@@ -26,6 +27,22 @@ class FormatViewSet(BaseViewSet):
             return Format.admin_objects.all()
 
         return Format.objects.all()
+
+
+
+class ImageViewSet(BaseViewSet):
+    parser_classes = (MultiPartParser, FormParser)
+    serializers = {
+        "default": ImageSerializer
+    }
+
+
+class AttachmentViewSet(BaseViewSet):
+    parser_classes = (MultiPartParser, FormParser)
+    serializers = {
+        "default": AttachmentSerializer
+    }
+
 
 
 class PropertyViewSet(BaseViewSet):
