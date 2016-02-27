@@ -1,12 +1,51 @@
 from rest_framework import serializers
 from django.db import transaction
+from django.conf import settings
 
 from api.generic.models import Property
 from api.user.models import UserProfile
-from .models import Dog, DogProperty
+from .models import Dog, DogProperty, DogAttachment
 from api.constants import GENDERS
 from api.breed.serializers import BreedSerializer
 from api.breed.models import Breed
+
+
+class DogAttachmentSerializer(serializers.ModelSerializer):
+    dog = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    file = serializers.FileField(
+        use_url = settings.UPLOADED_FILES_USE_URL)
+
+    content_type = serializers.CharField(
+        read_only = True)
+
+    def validate_file(self, file):
+        if file is None or file.content_type not in settings.UPLOADED_FILES_ALLOWED_TYPES:
+            raise serializers.ValidationError("Invalid file type (" + file.content_type + ").  Must be one of: " + str(settings.UPLOADED_FILES_ALLOWED_TYPES))
+        return file
+
+
+    def create(self, validated_data):
+        dog = Dog.objects.get(
+            id = self.context.get("view").kwargs["dog_id"])
+
+
+        file = validated_data.get("file", None)
+        content_type = file.content_type
+
+        attachment = DogAttachment.objects.create(
+            dog = dog,
+            file = file,
+            content_type = content_type,
+            name = validated_data.get("name", None))
+
+        return attachment
+
+
+    class Meta:
+        model = DogAttachment
+        fields = ("id", "name", "file", "dog", "content_type")
 
 
 class DogPropertySerializer(serializers.ModelSerializer):
@@ -67,6 +106,12 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
     properties = DogPropertySerializer(
         many = True)
 
+    attachments = DogAttachmentSerializer(
+        many = True,
+        read_only = True)
+
+
+
     @transaction.atomic
     def create(self, validated_data):
         user = self.context["request"].user
@@ -99,7 +144,7 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
 
         return dog
 
-
+    @transaction.atomic
     def update(self, instance, validated_data):
         dog = Dog.objects.get(
             id = instance.id)
@@ -129,5 +174,5 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Dog
-        fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans", "properties")
-        read_only_fields = ("id", "url", "owner", "breed")
+        fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans", "properties", "attachments")
+        read_only_fields = ("id", "url", "owner", "breed", "attachments")

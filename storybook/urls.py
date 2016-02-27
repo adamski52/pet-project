@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from api.authentication.views import LoginViewSet, LogoutViewSet
 from api.user.views import UserViewSet
-from api.dog.views import DogViewSet
+from api.dog.views import DogViewSet, DogAttachmentViewSet
 from api.breed.views import BreedViewSet
 from api.invite.views import InviteViewSet
 from api.generic.views import FormatViewSet, PropertyViewSet
@@ -16,6 +16,7 @@ router.register(r"login", LoginViewSet, "login")
 router.register(r"logout", LogoutViewSet, "logout")
 router.register(r"users", UserViewSet, "users")
 router.register(r"dogs", DogViewSet, "dogs")
+router.register(r"dogs/(?P<dog_id>[0-9])/attachments", DogAttachmentViewSet, "dogs-attachments")
 router.register(r"breeds", BreedViewSet, "breeds")
 router.register(r"invites", InviteViewSet, "invites")
 router.register(r"formats", FormatViewSet, "formats")

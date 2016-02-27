@@ -53,13 +53,6 @@ class Image(BaseModel):
     file = models.ImageField()
 
 
-class Attachment(BaseModel):
-    name = models.CharField(
-        max_length = 40)
-
-    file = models.FileField()
-
-
 
 
 class Property(BaseModel):

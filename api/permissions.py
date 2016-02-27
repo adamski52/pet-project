@@ -30,6 +30,12 @@ class PublicReadAdminWrite(permissions.BasePermission):
         
         return request.user.is_authenticated() and request.method in permissions.SAFE_METHODS
 
+class AttachmentPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated()
+
+    def has_object_permission(self, request, view, obj):
+        return True
 
 
 class DogPermissions(permissions.BasePermission):

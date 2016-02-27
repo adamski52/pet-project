@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from .serializers import FormatSerializer, PropertySerializer, PropertyGetSerializer, AttachmentSerializer, ImageSerializer
+from .serializers import FormatSerializer, PropertySerializer, PropertyGetSerializer, ImageSerializer
 from .models import Format, Property
 from api.permissions import PublicReadAdminWrite
 
@@ -34,13 +34,6 @@ class ImageViewSet(BaseViewSet):
     parser_classes = (MultiPartParser, FormParser)
     serializers = {
         "default": ImageSerializer
-    }
-
-
-class AttachmentViewSet(BaseViewSet):
-    parser_classes = (MultiPartParser, FormParser)
-    serializers = {
-        "default": AttachmentSerializer
     }
 
 

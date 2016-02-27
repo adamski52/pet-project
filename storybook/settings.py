@@ -108,6 +108,9 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+UPLOADED_FILES_USE_URL = False
+FILE_UPLOAD_PERMISSIONS = 0o644
+UPLOADED_FILES_ALLOWED_TYPES = ["text/plain", "application/pdf", "image/jpeg", "image/jpg", "image/png"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 587

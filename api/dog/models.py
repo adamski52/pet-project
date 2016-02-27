@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
 
 from api.generic.models import BaseModel, Property
 from api.breed.models import Breed
@@ -44,5 +45,24 @@ class Dog(BaseModel):
         DogProperty,
         null = True)
 
+
     def __str__(self):
         return self.name + " (" + self.owner.first_name + " " + self.owner.last_name + "'s)"
+
+
+class DogAttachment(BaseModel):
+    def get_file_name(instance = None, filename = ""):
+        return os.path.join("attachments", "dogs", str(instance.dog.id), filename)
+
+    name = models.CharField(
+        max_length = 40)
+
+    file = models.FileField(
+        upload_to = get_file_name)
+
+    content_type = models.CharField(
+        max_length = 40)
+
+    dog = models.ForeignKey(
+        Dog,
+        related_name = "attachments")
