@@ -11,24 +11,6 @@ from api.breed.serializers import BreedSerializer
 from api.breed.models import Breed
 
 
-class UserShallowSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        read_only = True,
-        view_name = "users-detail")
-
-    id = serializers.PrimaryKeyRelatedField(
-        read_only = True)
-
-    first_name = serializers.CharField()
-
-    last_name = serializers.CharField()
-
-    class Meta:
-        model = User
-        fields = ("id", "url", "username", "first_name", "last_name")
-        read_only_fields = ("id", "url", "username", "first_name", "last_name")
-
-
 class DogAttachmentSerializer(serializers.ModelSerializer):
     dog = serializers.HyperlinkedRelatedField(
         read_only = True,
@@ -40,12 +22,12 @@ class DogAttachmentSerializer(serializers.ModelSerializer):
     content_type = serializers.CharField(
         read_only = True)
 
-    uploaded_by = UserShallowSerializer()
+    #uploaded_by = UserShallowSerializer()
 
 
-    #uploaded_by = serializers.HyperlinkedRelatedField(
-    #    read_only = True,
-    #    view_name = "users-detail")
+    uploaded_by = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        view_name = "users-detail")
 
     def validate_file(self, file):
         if file is None or file.content_type not in settings.UPLOADED_FILES_ALLOWED_TYPES:

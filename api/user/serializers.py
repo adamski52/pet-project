@@ -35,8 +35,12 @@ class UserAttachmentSerializer(serializers.HyperlinkedModelSerializer):
         read_only = True,
         view_name = "users-detail")
 
-    uploaded_by = UserShallowSerializer(
-        read_only = True)
+    #uploaded_by = UserShallowSerializer(
+    #    read_only = True)
+
+    uploaded_by = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        view_name = "users-detail")
 
     file = serializers.FileField(
         use_url = settings.UPLOADED_FILES_USE_URL)
