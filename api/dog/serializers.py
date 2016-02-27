@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.db import transaction
+from django.contrib.auth.models import User
 from django.conf import settings
 
 from api.generic.models import Property
@@ -10,15 +11,41 @@ from api.breed.serializers import BreedSerializer
 from api.breed.models import Breed
 
 
-class DogAttachmentSerializer(serializers.ModelSerializer):
-    dog = serializers.PrimaryKeyRelatedField(
+class UserShallowSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "users-detail")
+
+    id = serializers.PrimaryKeyRelatedField(
         read_only = True)
+
+    first_name = serializers.CharField()
+
+    last_name = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ("id", "url", "username", "first_name", "last_name")
+        read_only_fields = ("id", "url", "username", "first_name", "last_name")
+
+
+class DogAttachmentSerializer(serializers.ModelSerializer):
+    dog = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        view_name = "dogs-detail")
 
     file = serializers.FileField(
         use_url = settings.UPLOADED_FILES_USE_URL)
 
     content_type = serializers.CharField(
         read_only = True)
+
+    uploaded_by = UserShallowSerializer()
+
+
+    #uploaded_by = serializers.HyperlinkedRelatedField(
+    #    read_only = True,
+    #    view_name = "users-detail")
 
     def validate_file(self, file):
         if file is None or file.content_type not in settings.UPLOADED_FILES_ALLOWED_TYPES:
@@ -37,6 +64,7 @@ class DogAttachmentSerializer(serializers.ModelSerializer):
         attachment = DogAttachment.objects.create(
             dog = dog,
             file = file,
+            uploaded_by = self.context.get("request").user,
             content_type = content_type,
             name = validated_data.get("name", None))
 
@@ -45,7 +73,7 @@ class DogAttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DogAttachment
-        fields = ("id", "name", "file", "dog", "content_type")
+        fields = ("id", "name", "file", "dog", "uploaded_by", "content_type")
 
 
 class DogPropertySerializer(serializers.ModelSerializer):

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+import os
 
 from api.generic.models import BaseModel
 from api.dog.models import Dog
@@ -43,3 +44,27 @@ class UserProfile(BaseModel):
 
     dob = models.DateField(
         null = True)
+
+
+
+
+class UserAttachment(BaseModel):
+    def get_file_name(instance = None, filename = ""):
+        return os.path.join("attachments", "users", str(instance.user.id), filename)
+
+    uploaded_by = models.ForeignKey(
+        User)
+
+    name = models.CharField(
+        max_length = 40)
+
+    file = models.FileField(
+        upload_to = get_file_name)
+
+    content_type = models.CharField(
+        max_length = 40)
+
+    user = models.ForeignKey(
+        User,
+        related_name = "attachments")
+

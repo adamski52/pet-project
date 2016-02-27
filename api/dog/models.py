@@ -54,6 +54,9 @@ class DogAttachment(BaseModel):
     def get_file_name(instance = None, filename = ""):
         return os.path.join("attachments", "dogs", str(instance.dog.id), filename)
 
+    uploaded_by = models.ForeignKey(
+        User)
+
     name = models.CharField(
         max_length = 40)
 

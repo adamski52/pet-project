@@ -2,18 +2,18 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
-from api.permissions import DogPermissions, AttachmentPermissions
+from api.permissions import DogPermissions, DogAttachmentPermissions
 from api.user.models import UserProfile
-from api.generic.views import BaseViewSet
+from api.generic.views import BaseViewSet, BaseAttachmentViewSet
 from .serializers import DogSerializer, DogAttachmentSerializer
 from .models import Dog, DogAttachment
 
-class DogAttachmentViewSet(BaseViewSet):
+class DogAttachmentViewSet(BaseAttachmentViewSet):
     serializers = {
         "default": DogAttachmentSerializer
     }
 
-    permission_classes = (AttachmentPermissions,)
+    permission_classes = (DogAttachmentPermissions,)
 
     def get_queryset(self):
         if self.request.user.is_staff:

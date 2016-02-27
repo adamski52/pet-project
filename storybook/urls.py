@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 
 from api.authentication.views import LoginViewSet, LogoutViewSet
-from api.user.views import UserViewSet
+from api.user.views import UserViewSet, UserAttachmentViewSet
 from api.dog.views import DogViewSet, DogAttachmentViewSet
 from api.breed.views import BreedViewSet
 from api.invite.views import InviteViewSet
@@ -15,6 +15,7 @@ router = DefaultRouter()
 router.register(r"login", LoginViewSet, "login")
 router.register(r"logout", LogoutViewSet, "logout")
 router.register(r"users", UserViewSet, "users")
+router.register(r"users/(?P<user_id>[0-9])/attachments", UserAttachmentViewSet, "users-attachments")
 router.register(r"dogs", DogViewSet, "dogs")
 router.register(r"dogs/(?P<dog_id>[0-9])/attachments", DogAttachmentViewSet, "dogs-attachments")
 router.register(r"breeds", BreedViewSet, "breeds")

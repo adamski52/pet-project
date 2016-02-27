@@ -3,6 +3,7 @@
 *.DS_Store
 fixtures/
 migrations/
+attachments/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

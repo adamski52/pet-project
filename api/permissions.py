@@ -1,6 +1,7 @@
 from rest_framework import permissions
 
 from api.user.models import UserProfile
+from api.dog.models import Dog
 
 class IsAuthenticatedAndScheduler(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -30,12 +31,41 @@ class PublicReadAdminWrite(permissions.BasePermission):
         
         return request.user.is_authenticated() and request.method in permissions.SAFE_METHODS
 
+
 class AttachmentPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated()
+        if request.user.is_staff:
+            return True
+
+        return request.user.is_authenticated() and request.user.id == int(view.kwargs["user_id"])
 
     def has_object_permission(self, request, view, obj):
-        return True
+        if request.user.is_staff:
+            return True
+
+        return request.user.is_authenticated() and request.user.id == int(view.kwargs["user_id"])
+
+
+class DogAttachmentPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_staff:
+            return True
+
+        dog = Dog.objects.get(
+            id = int(view.kwargs["dog_id"]))
+
+
+        return request.user.is_authenticated() and (request.user == dog.owner or request.user in dog.humans.all())
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff:
+            return True
+
+        dog = Dog.objects.get(
+            id = int(view.kwargs["dog_id"]))
+
+        return request.user.is_authenticated() and (request.user == dog.owner or request.user in dog.humans.all())
+
 
 
 class DogPermissions(permissions.BasePermission):
