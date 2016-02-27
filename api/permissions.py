@@ -1,7 +1,40 @@
 from rest_framework import permissions
-
+from datetime import datetime, timedelta
 from api.user.models import UserProfile
 from api.dog.models import Dog
+from api.appointment.models import Appointment
+
+
+class CameraPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_staff:
+            return True
+
+        return request.method in permissions.SAFE_METHODS
+
+    def has_object_permission(self, request, view, obj):
+        if obj.is_public:
+            return True
+
+        if request.user.is_staff:
+            return True
+
+        if not request.user.is_authenticated():
+            return False
+
+        # if the camera is in a room during a scheduled appointment, for a dog of which the current user is the owner or a proxy....
+        room = obj.room
+
+        appointment = Appointment.objects.filter(
+            room = room,
+            start_date__lte = datetime.now(),
+            end_date__gte = datetime.now(),
+            is_confirmed = True,
+            scheduled_for = request.user)
+
+        return appointment.count() > 0
+        
+        
 
 class IsAuthenticatedAndScheduler(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -13,8 +46,11 @@ class IsAuthenticatedAndScheduler(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_staff:
             return True
-        
-        return request.user.is_authenticated() and obj.scheduled_for == request.user
+
+        if request.method == "DELETE" or "PUT" or "GET":
+            return request.user.is_authenticated() and obj.scheduled_for == request.user
+
+        return False
 
 
 

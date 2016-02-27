@@ -186,3 +186,47 @@ class DogSerializer(serializers.HyperlinkedModelSerializer):
         model = Dog
         fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans", "properties", "attachments")
         read_only_fields = ("id", "url", "owner", "breed", "attachments")
+
+
+
+
+
+class DogShallowSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        read_only = True,
+        view_name = "dogs-detail")
+
+    id = serializers.PrimaryKeyRelatedField(
+        read_only = True)
+
+    humans = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        many = True,
+        view_name = "users-detail")
+
+    owner = serializers.HyperlinkedRelatedField(
+        read_only = True,
+        view_name = "users-detail")
+
+    name = serializers.CharField()
+
+    dob = serializers.DateField()
+
+    #breed = BreedSerializer(Breed)
+
+    breed = serializers.HyperlinkedRelatedField(
+        queryset = Breed.objects,
+        view_name = "breeds-detail")
+
+
+    weight = serializers.IntegerField()
+    
+    color = serializers.CharField()
+
+    gender = serializers.ChoiceField(
+        choices = GENDERS.values)
+
+    class Meta:
+        model = Dog
+        fields = ("id", "url", "owner", "name", "dob", "breed", "weight", "color", "gender", "humans")
+        read_only_fields = ("id", "url", "owner", "breed")

@@ -14,20 +14,14 @@ class AppointmentProperty(BaseModel):
         max_length = 40)
 
 
-class AppointmentManager(ActiveManager):
-    def get_queryset(self):
-        return super(AppointmentManager, self).get_queryset().filter(
-            is_cancelled = False)
-
-
 class Appointment(BaseModel):
-    objects = AppointmentManager()
-
     scheduled_by = models.ForeignKey(
-        User)
+        User,
+        editable = False)
 
     scheduled_for = models.ForeignKey(
-        User)
+        User,
+        editable = False)
 
     dog = models.ForeignKey(
         Dog,
