@@ -5,6 +5,27 @@ from api.dog.models import Dog
 from api.appointment.models import Appointment
 
 
+class RoomPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_staff:
+            return True
+
+        return request.method in permissions.SAFE_METHODS
+
+
+    def has_object_permission(self, request, view, obj):
+        if obj.is_public:
+            return True
+
+        if request.user.is_staff:
+            return True
+
+        if not request.user.is_authenticated():
+            return False
+
+        return True
+
+
 class CameraPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_staff:

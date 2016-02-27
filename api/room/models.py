@@ -16,6 +16,9 @@ class Room(BaseModel):
         unique = True,
         max_length = 40)
 
+    is_public = models.BooleanField(
+        default = False)
+
     properties = models.ManyToManyField(
         RoomProperty,
         null = True)

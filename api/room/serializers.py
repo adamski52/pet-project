@@ -31,6 +31,8 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         read_only = True)
 
+    is_public = serializers.BooleanField()
+
     properties = RoomPropertySerializer(
         many = True)
 
@@ -73,6 +75,6 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Room
-        fields = ("id", "url", "name", "properties")
+        fields = ("id", "url", "is_public", "name", "properties")
         read_only_fields = ("id", "url")
 
