@@ -1,4 +1,10 @@
 #!/bin/bash
+
+#Install XQuartz: http://xquartz.macosforge.org/landing/
+#brew install python3 hg sdl sdl_image sdl_mixer sdl_ttf portmidi
+#pip3 install hg+http://bitbucket.org/pygame/pygame
+
+
 WAIT=4
 TIMELEFT=$WAIT
 SHUTUP=0

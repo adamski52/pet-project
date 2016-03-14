@@ -1,65 +1,5 @@
 import os
 
-"""
-oosyys/::::::::::::::::/:::://///:::::::::::-:-------:/++osooooooo+/::::::::::--
-ooosyho:::::::::::/++osysoossssssssso+/::::-----------:/+osooo+//::------:::::--
-ooosyss/::::::/++oosyhhyssyyyyhhyyyyyyys/++/:-----------:/oo+/::----------------
-oooosso/::::/+ssosyyyhdyyhhyyyhddyssssysyyyhyo//----------:::-------------------
-++///::::/+ssyyyyyyyhdmdmmddhyhhhmhysyyyssshhyyo/-------------------------------
-///:::::/shyyyssysssyhdmmmmdddhhNdhhyyhyyyhhyyyso/:----------------------::-----
-//:::/osyyhhyssssyhhhhhdmmmdmmmNNmmhysysyyyhhyyyysys/-----------------------:---
-//:::+hhhyyhhyyhhyhddddmmNNmNmNMNNmdhhsyddmdyyyyyhddh/--------------------------
-////oyhhhhyyhhhhdmNmNNNNmNNNNNNMMNmmmhdNNdmhdhhyhhdmmh/-------------------------
-///ohhhhdhhyyhddmmNNNNNNNNNmmmNmmmdddmNNNNmmmhhhhhdmmds:------------------------
-//+yddhdddhhdddmmmmmddddmdddddmmddmmmmNmmmmmmdhddmmmmmh/------------------------
-//oddddddddddddhhhhyyysyhsssyhhdhhhddhhhhhhdddddmmmNNNd/------------------------
-//sddmmdddddhsssssooo+osso++ossssssssssyyyhhdddmNNNNNNd:------------------------
-//odmmmmdmmhsosooo++/+ooo+///+o++ooosssyyyyhhhdmNNNNNNy:------------------------
-//odmmmmmddysssoo++//++++::::/+++++oosssyyhhhddmNNNNNNs-------------------------
-//+dNNmmdddysssoo+++//++:::-::/+//++oosssyyhhddmmNNNNNh:------------------------
-//+dmmNNmmdyssoooo++////:::::::///++ooossyyhhhdmNNNNNNy--:::--------------------
-/:/omNNNNmdysssoooo++//:::::::::///++oosssyyyyhdNNNNNNd::/+o+/:::---------------
-:::/hmNNNmhysssooo++//::-::--:---://+ooosssyyyyhmNNNNNm:/+oooo+oo++//:----------
-/:::+hmNmmhysooooo++//:--::--::::///+oossyyyyyyhdmNNNNd//++++oooosys+:----------
-:::::+dmmmhysooooo++++/////::/+/+osyhddddhhhhhhhhdNNNNs//++oosso+oso/:----------
-::::::ymmmdsooosyhhhhhhhyso+//oosyhddmddhyyhhyyyyhmmmm++oooooso+osy+:-----------
-::::::/yhmdoooosysssyddyysso/:+osyso/syyssysssssyhmmmy+oosssoooo+ss/:::--:::----
-:::::::+yhdooooooyyohhy++/+++:/oss+///+++o+ooossyhdmdy:://+oooooos+::::::::-----
-:::::::/oshso++oo+++++/+//+++//osso+//////++ooosyhdddo::::::::/+++::::::::::::--
-:::::::::/ssoo++//////:::/++++/+ssso+/:::/++oooshddhy/::::::::::::::::::::::::::
-:::::::---/ooo++////::::///+++//ossso+//://++osyhddho:::::::::::::::::::::::::::
-::::::----:/+++++////:://++++//:+ossso+///++oosyhdy/::::::::::::::::::::::::::::
-::::::------/++++/////://+++++/:/ohyhs+++oooosyyhd/:::::::::::::::::::::::::::::
-::::::-------:++++//////+//osoooohmhyssoooosooyyhh::::::::::::::::::::::::::::::
-:::::---------:+++++++++/++ooossssyyyssssssssoyyhh::::::::::::::::::::::::::::::
-::::-----------/o++++++++ooooo++++osssyysssosoyyhs::::::::/:::::::::/:::::::::::
-::::------------+o++++ooosososssosysyhysooosysyhmh::::://:/::::::::////:::::::::
-::::-------------+o++++oo+osssoo+++ssssoossyyyhdNm+::://////////:///////::::::::
-:::---------------+oooooo+++oosooossyysoossyhhdNNmmds+///////////////////:::::::
-::::--------------:osoooooo++ooososssooossyhdmmmmmmmNmds+///////////////::::::::
-::::---------------+ossssooo+++++/+++oossyhdmmmddddddmNNmdyo//////////////::::::
-:::---------------+sooosyysoooo++//++osyyddmmddddddhhhdNNNNmdhssooo+///////:::::
-:::-------------/smhooooosyyysoooooossyyhdmddhhhhhhhyyyhmNNNNNNNmNmmdyssoo+//:::
-:::::---------/sdmNsoooooooosyyyyyyyyhhddddhyyyyyyyyysssymNmmNNNNNNNNNNNNmmddhso
-:::::::::///+sdmmmNs+ooooo+++oosyyyyyyyhhyysssyyyssssssssymmmmmNNNmNNNNNNNNmmmmm
-:///+++ooyhdmmmmmNNy++oooo++++++oooossssssooossssssooooosshmmmmmNNmmmNNNNmNNmmmm
-/+++oshdmmmmmmNmmNNy++++++++++++++++ooooo+++ooooooooooooo+/hmmmmNNmNNNNmmNNmmmmm
-+oyhdmmmNmmmmmmmmmNh+++++++++++++++++++/////++oooooooooo/--/dmmmNNmNNNmmmmmNmmmm
-dmmmmmmmmmmmmmmmmmNdo+++++++///////++++//++++++o+++o++/-...-ydmNNNmmmmmmmmmmmmmm
-mmmmmmmmmmmmmmmmmmNho++++///////++/+++++++++++++++++/-....../ddmNNM the kevin mm
-NNNNmmmmmmmmmmmmmmNh+///////////++//+++++++///++//:.........-ddmNNNNNmmmmmNmmmmm
-NNNmmmmmmmmmmmmmmmNh////////////+++///+///////:-.............sdmNNNmNmmmNNNmmmmm
-mmmmmmmmmmmmmmmmmmNh////////////++++/////::--................+dmmNNNNmmmmNNmmmmm
-mmmmmmmmmmmmmmmmmmms-..----:::::::::--.......................:ddmNNNmmmmmNNmmmmm
-mmmmmmmmmmmmmmmmmmmy....``...................................-hdmNNNNNmmmmNmmmmN
-mmmmmmmmmmdmmmmmdmmh-..``...............`..`.```````...`......yddmNNNNmmNmNmmmmm
-mmmmmmmmmddddmmmmmmd:.```````````````````````````````````.....sddmmNNNmmmmmNmmmm
-NmNmmmddmmddddmmmdmm+.....``````````````.````````````````.....oddmmNNNmmmmmNmmmm
-NNmNmmddmdddddddddmms................`..`````````````````.....+ddmmNNNNmmmmmmmmm
-Nmmmmmddddhhhddddddds-.....``....````````````````````````..``./hddmmmmmmmmmmmmmm
-"""
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -86,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'api'
 ]
 
@@ -100,6 +41,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -107,6 +49,19 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+COLLAGE_MAX_RESULTS = 50
+COLLAGE_ALLOWED_TYPES = ["jpg", "jpeg", "png"]
+COLLAGE_WEB_THUMBNAIL_DIRECTORY = "images/collages/thumbnails/"
+COLLAGE_WEB_FULL_DIRECTORY = "images/collages/full/"
+COLLAGE_PENDING_DIRECTORY = "/Users/jon/Projects/storybook-client/images/collages/"
+COLLAGE_FULL_DIRECTORY = COLLAGE_PENDING_DIRECTORY + "full/"
+COLLAGE_THUMBNAIL_DIRECTORY = COLLAGE_PENDING_DIRECTORY + "thumbnails/"
+COLLAGE_JUNK_DIRECTORY = COLLAGE_PENDING_DIRECTORY + "junk/"
+COLLAGE_CROPPED_WIDTH = 100
+COLLAGE_CROPPED_HEIGHT = 100
 
 UPLOADED_FILES_USE_URL = False
 FILE_UPLOAD_PERMISSIONS = 0o644

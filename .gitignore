@@ -4,6 +4,7 @@
 fixtures/
 migrations/
 attachments/
+storybook/settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

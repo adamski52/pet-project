@@ -1,8 +1,12 @@
 import os
-os.environ['DJANGO_SETTINGS_MODULE']='storybook.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'storybook.settings'
 import sys, django, getopt
 django.setup()
 
+from django.conf import settings
+import uuid, errno
+from PIL import Image
+from math import ceil
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -11,150 +15,6 @@ from django.template.loader import render_to_string
 from api.user.models import UserProfile
 from api.invite.models import Invite
 from api.dog.models import Dog
-
-
-"""
-oh hi.  looks best in sublime with the code viewer.
-
-
-
-                                                                                      
-                               .##+'+#@   :+###                                       
-                             #@@@@@@@@@@@@@@@@@@#'''                                  
-                           `#@@@@@@@@@@@@@@@@@@@@@@@@@                                
-                        `#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+                              
-                    ` ,#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@,                          
-                      @#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@,                        
-                    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                       
-                 `:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                       
-                 ,@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`                     
-                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-               ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@;                    
-              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`                   
-              .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#'                   
-             ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`                  
-          `  #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                  
-            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                 
-          `@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                 
-         ;@@@@@@@@@@@@@@@@@@#@@@@@@#@+.'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                 
-        #@@@@@@@@@@@@@@@@@@@@@@@@#.       #@@@@@@@@@@@@@@@@@@@@@@@@@@@                
-      `@#@@@@@@@@@@@@@@@@@@@@@             @@@@@@@@@@@@@@@@@@@@@@@@@@@`               
-       @@@@@@@@@@@@@@@@@@###,               `+@@@@@@@@@@@@@@@@@@@@@@@@;`              
-       @@@@@@@@@@@@@@@@@@@#                    @@@@@@@@@@@@@@@@@@@@@@@@               
-       @@@@@@@@@@@@@@@@@@`                     @@@@@@@@@@@@@@@@@@@@@@@@               
-       @@@@@@@@@@@@@@@                         @@@@@@@@@@@@@@@@@@@@@@@@`              
-       @@@@@@@@@#.                             @@@@@@@@@@@@@@@@@@@@@@@@,              
-       @@@@@@@@@                               @@@@@@@@@@@@@@@@@@@@@@@@;              
-       @@@@@@@#                                @@@@@@@@@@@@@@@@@@@@@@@@@              
-        +#@@#@                                 @@@@@@@@@@@@@@@@@@@@@@@@@              
-         #@@@+              `                  ,@@@@@@@@@@@@@@@@@@@@@@@@              
-          @@@               ;                    @@@@@@@@@@@@@@@@@@@@@@@              
-          .@#           :@;                       @@@@@@@@@@@@@@@@@@@@@@              
-           @#     ,#  ` ;@'                        @@@@@@@@@@@@@@@@@####              
-          @@#   .@    ''      `                   ` @#@@@@@@@@@@@# `   .,             
-         :@@`  #  ` ,,   `@@@;::                    '#@@@@@@@@@@@` @#++',             
-          @@  @   ``  `  @@@@#@@@.   `               @@@@@@@@@@@+ @     :'`           
-          @@  .` ,@@  ` @@@@@@@@@@@@@@@.`            `@@@@@@@@@@ ``     @@            
-         .#@    #@@. , ,@@@@@@@@@@@@@@@@@:            @@@@@@#@#  ;      ;'            
-          :@   @@@@. .    ,,,@@@@@@@@@@@@#+`          @@@@@@#@` ``       ``           
-         `.#  @@@@@ : `        @@@@@@@@@@@#@@`        ;@@@@@@            @.           
-           .`@@@@@` '`#               `:@+:           `@@@@@`      ` `    `           
-            @@@@@'   .#                ` . @           @@@@#     #':   `  `           
-         ``#@@@#'                       `.#           `@@#@`     @     +# `           
-           @@@@@               ;; ;@`.  @  ';`        `#@@@      +     @#,            
-          @@@@@@@+    `   ,    `@@@@@@@ @#`                            @#;            
-          @@@@#`   #. #   @`  :@@@'`    '#:`                    #      ##;            
-          @@@@  `    @ `  @`   @`     `                         `, `   `';            
-          @@@     ````'@   `         '`                          @    #,`;            
-          :@;   #@@@@@## `     +`  ;'                            @   `.+ '            
-           @   @@@#';'#'       ` ``                              #  ' `  '            
-           @  @@@     #+                                         #,,    `@            
-           ..#+@     : @                                         @:     `             
-            ,'+    '+ +@                                                @             
-             @:,##'  + .                                               ,              
-            `# .    @ `                                                #`             
-             +#    `` ;       `                                     ` @               
-             '     #  @       `;#,``',                           ` `@@@               
-             @    :   .        ` `,   @                          @,` @@               
-            ``    +  #            @    #                         @  `@@               
-            +    ,   '           `@    `'                        @  '@@               
-            @    @  @;           :       #       `               @  @@'               
-            #    #  ,@     :;. `````      @      '               @  @@.               
-            '    :  :`    ' `     ``       +     @               @  @@`               
-            +    ,` # #,                   , '   @               @  @@                
-            +    `.  ``                     ' ,  :               @. @@                
-             .    ;             ,#@@@#@'    @ @  `               #``@@                
-             #`  '    `     .@'`  :@@@@@@@. : @  `                .,@@                
-              `  +       '#     @@@@@@@@@@#,` @  `                `:@@                
-              @  ;     #:   `@@@#@# ; ' @`@#  @  `                .,@                 
-              ``  ` ``;  `'@@@ @`,` , ' @;@;  @  +                .,@                 
-               @  +  @`@@@@; . '``` @;@@@@@# `@  +                ..                  
-                , :  #`@#, '`;`` :@@@@@@#@@+  @ `                 ..                  
-                #  @ .`@#':;  `'@@@@@@@@@@'`  @ ;                 .`                  
-               ``+ `#` @@#;#@#a2m@@@@@'@#@ @   @ @                 .`                  
-                 .   @ '`@@@@@@@#@#`, +#  `   @ ;                 .                   
-                  ; ` #`.;@@@@@#,`, @#   @    +                   .                   
-                   @   `+ .#@@.  +@,    +     :;                 `  .                 
-                    @  ' @  '''',      @     . @                 #  :                 
-                     +  '`.       ` `#`      @ `               `@   +                 
-                     .` : :#   `'@@;         '`                :    @                 
-                    ``:  '  `               + @                ;    @                 
-                       @ + `              `,` ;               #     ;,                
-                        :``                . .              `@      `+                
-                        ; #               ;  @              `         .               
-                         ,@                                 @`        @               
-                         :                                  `         +               
-                         ;                                 `          `               
-                         '                   `                         ;              
-                         +                `@                          `@'             
-                         +                +                           `, #            
-                          ,              '`                            `' +           
-                          #             #                               @ .           
-                          `@`         ;;                                #  #          
-                            `@.`   `@,                                  '@ `@         
-                            ;  @@@:                                     `.   #`       
-                            ;,`` #                                       @'    @      
-                           +  #   @                                       @     #``   
-                         ``.  ;    @                                     `@   ` `,@   
-                          @`    `                                         @       ``  
-                         ,     @    `                                     #        @  
-                         #`    .                                          #      ` :  
-                        `       #                                         ,           
-                        @        #`                                       `         ` 
-                                                                         .            
-                                                                         @            
-                                                                         @            
-                                                                                      
-
-
-                                                                                                    
-                                                                                                    
-                                    ```````````````                                                 
-                  ``..-::/+++osssyyyyyyyyyyyyyyyyyyysssssoo++//:-..``                               
-         `.-:/+ossyyhhhhhyysoo++//:---...```````` ````````...--:://+++++//:-.``                     
-   .:/osyyhhhhhyys+//:-.```                                             ``.-::////:-``              
-   :hhhyyso/:-.`                                                                  `.:::::-``        
-    //-``                                                                               ``--.       
-                 /:/`                                                                               
-                 o:+-/-//-/:/:/-:/-//-/:`                                                           
-      `-+oooo/.  o``.:-/-/o.+/.///-/+-/+`       .+++++++++-      /++:                               
-     .sho:--/sh+`-  `. --`//+.``:-`--.:-        .yhhysssss:     `yhh+                               
-     oho`    .yh-    ``   `.`   ``        ```   -hhh/         ` `yhho    ``           ``            
-     sh+     `yh:oy+osyyo.  .+ssoss+``sy/ossys. .hhh+````` -syyyoyhh+ .oyyys+yyo` -oyyyyso-         
-     sh+     `yh:sho` `/hs``sh:` `+ho`yh+```/ho -hhhyyyyyy.yhh+.:yhho`ohhs.-yhhs`:hhy:.:hhy.        
-     sh+     `yh:sh-   `yy..yy:---/hy.yh.   -hs`-hhho::::--hyh- `yhh+`yhh+  ohhs`ohhy+/+yhh/        
-     sh+     `yh:sh-   `yy.-hy+//////.yh.   -hs`-hhh+     .hhh- `yhh+`yhh/  ohhs`ohhy//////-        
-     /hs`    :hy.sh/   -hy``yy-   -+/`yh.   -hs`-hhh+.````.yhh/ .yhh+`shho``shhs`/hhy. -sss-        
-     `+yy+//oyy: shs+//yy/  :yy//+yy:`yh.   -hs`-hhhhhhhhho+hhyosyhho -shhysyhhs``ohhyoyhy+-`       
-       `-://:-`  sh-.::-`    `-:::-` `--`   `-. `---------. .:::..--. .-::.`+hhs`  `-:::-` .        
-                 sh-                                                  /hhy:/yhy/                    
-                 /+.                                                   ./++o+/.                     
-                                                                                                    
-                                                                                                    
-
-                            ^ if i'm found dead, this is the reason
-
-"""
 
 
 def invites():
@@ -234,13 +94,101 @@ def invites():
         print("Email sent to " + email + " with " + str(len(context)) + " invites.")
 
 
+def crop_image(path, cropped_width, cropped_height):
+  # first take smallest of width and height and shrink image to that, in proportion
+
+  img = Image.open(path)
+  width, height = img.size
+
+  if width > height:
+    ratio = width/height
+
+    #width = cropped_height * ratio
+    #height = cropped_height
+  else:
+    ratio = height/width
+
+    #width = cropped_width
+    #height = cropped_width * ratio
+
+  #width = ceil(width)
+  #height = ceil(height)
+
+  height = cropped_height
+  width = ceil(cropped_height * ratio)
+  img = img.resize((width, height))
+
+  #left = ceil((width - cropped_width) / 2)
+  #top = ceil((height - cropped_height) / 2)
+  #right = ceil((width + cropped_width) / 2)
+  #bottom = ceil((height + cropped_height) / 2)
+
+  #return img.crop((left, top, right, bottom))
+
+  return img
+
+
+def make_dir(new_dir):
+    try:
+        os.makedirs(new_dir)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST or not os.path.isdir(new_dir):
+            raise
+
+
+def cleanup_collage_junk():
+  make_dir(settings.COLLAGE_PENDING_DIRECTORY)
+  make_dir(settings.COLLAGE_JUNK_DIRECTORY)
+
+  os.chdir(settings.COLLAGE_JUNK_DIRECTORY)
+
+  for i in os.listdir(os.getcwd()):
+      pending_filepath = settings.COLLAGE_JUNK_DIRECTORY + i
+
+      if os.path.isfile(pending_filepath):
+          os.remove(pending_filepath)
+
+
+
+def collages():
+  filename = ""
+  make_dir(settings.COLLAGE_PENDING_DIRECTORY)
+  make_dir(settings.COLLAGE_JUNK_DIRECTORY)
+  make_dir(settings.COLLAGE_THUMBNAIL_DIRECTORY)
+  make_dir(settings.COLLAGE_FULL_DIRECTORY)
+  os.chdir(settings.COLLAGE_PENDING_DIRECTORY)
+
+  for pending_filename in os.listdir(os.getcwd()):
+      pending_filepath = settings.COLLAGE_PENDING_DIRECTORY + pending_filename
+      file_extension = pending_filename.split(".")[-1]
+      destination_filename = str(uuid.uuid4()) + "." + file_extension
+      #destination_filename = pending_filename
+
+      if pending_filename.endswith(".jpg") or pending_filename.endswith(".jpeg") or pending_filename.endswith(".png"): 
+          try:
+            cropped_image = crop_image(pending_filepath, settings.COLLAGE_CROPPED_WIDTH, settings.COLLAGE_CROPPED_HEIGHT)
+            cropped_image.save(settings.COLLAGE_THUMBNAIL_DIRECTORY + destination_filename)
+          except SystemError:
+            os.rename(pending_filepath, settings.COLLAGE_JUNK_DIRECTORY + pending_filename)
+            continue
+
+          os.rename(pending_filepath, settings.COLLAGE_FULL_DIRECTORY + destination_filename)
+      elif os.path.isfile(pending_filepath):
+          print("ignoring bullshit file " + pending_filename)
+          os.rename(pending_filepath, settings.COLLAGE_JUNK_DIRECTORY + pending_filename)
+
 
 
 def main(argv):
+    print("argv: " + str(argv))
     if "invites" in argv:
         invites()
 
-    
+    if "collages" in argv:
+        collages()
+
+    if "cleanup" in argv:
+        cleanup_collage_junk()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
