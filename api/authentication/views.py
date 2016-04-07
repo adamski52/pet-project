@@ -10,8 +10,8 @@ class LoginViewSet(mixins.CreateModelMixin,
     queryset = []
 
     def create(self, request):
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.data["username"]
+        password = request.data["password"]
 
         user = authenticate(username=username,
             password=password)
