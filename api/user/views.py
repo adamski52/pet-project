@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_framework import permissions
 
 from .serializers import UserSerializer, UserAttachmentSerializer
 from api.permissions import OneTimeCreate, AttachmentPermissions
@@ -32,5 +33,8 @@ class UserViewSet(BaseViewSet):
     permission_classes = (OneTimeCreate,)
 
     def get_queryset(self):        
-        return User.objects.filter(
-            id = self.request.user.id)
+        if self.request.user.is_staff:
+            return User.objects.all()
+        else:
+            return User.objects.filter(
+                id = self.request.user.id)

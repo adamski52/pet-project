@@ -39,7 +39,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
@@ -143,10 +143,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1)
-}
+#JWT_AUTH = {
+#    'JWT_ALLOW_REFRESH': True,
+#    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1)
+#}
 
 
 # Internationalization
