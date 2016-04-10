@@ -11,12 +11,10 @@ from api.room.views import RoomViewSet
 from api.appointment.views import AppointmentViewSet
 from api.schedule.views import ScheduleViewSet
 from api.camera.views import CameraViewSet
-from api.csrftoken.views import TokenViewSet
 from api.collage.views import CollageViewSet
 
 
 router = DefaultRouter()
-#router.register(r"token", TokenViewSet, "token")
 router.register(r"login", LoginViewSet, "login")
 router.register(r"logout", LogoutViewSet, "logout")
 router.register(r"users", UserViewSet, "users")
