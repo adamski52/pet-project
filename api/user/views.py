@@ -32,8 +32,5 @@ class UserViewSet(BaseViewSet):
     permission_classes = (OneTimeCreate,)
 
     def get_queryset(self):        
-        if self.request.user.is_staff:
-            return User.objects.all()
-        else:
-            return User.objects.filter(
-                id = self.request.user.id)
+        return User.objects.filter(
+            id = self.request.user.id)

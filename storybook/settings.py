@@ -1,4 +1,5 @@
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,7 +15,6 @@ SECRET_KEY = 'r7-$l0dtu_*on%((#s$lkbi^_-^469_!(33_5f-pp$x*#f#dez'
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-
 
 # Application definition
 
@@ -34,6 +34,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer'
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
@@ -52,7 +58,14 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+#CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000',
+    'localhost:8000',
+    'jonathanadamski.com',
+    'storybookkennels.com'
+)
 
 COLLAGE_MAX_RESULTS = 80
 COLLAGE_ALLOWED_TYPES = ["jpg", "jpeg", "png"]
@@ -130,6 +143,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1)
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -148,3 +167,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "static"),
+#    '/Users/jon/Projects/storybook-client/',
+#]

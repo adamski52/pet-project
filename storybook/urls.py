@@ -12,10 +12,12 @@ from api.appointment.views import AppointmentViewSet
 from api.schedule.views import ScheduleViewSet
 from api.camera.views import CameraViewSet
 from api.collage.views import CollageViewSet
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token
 
 
 router = DefaultRouter()
-router.register(r"login", LoginViewSet, "login")
+#router.register(r"login", LoginViewSet, "login")
 router.register(r"logout", LogoutViewSet, "logout")
 router.register(r"users", UserViewSet, "users")
 router.register(r"users/(?P<user_id>[0-9]+)/attachments", UserAttachmentViewSet, "users-attachments")
@@ -33,6 +35,8 @@ router.register(r"cameras", CameraViewSet, "cameras")
 router.register(r"collages", CollageViewSet, "collages")
 
 urlpatterns = [
+    url(r'^api/login', obtain_jwt_token),
+    url(r'^api/renew', refresh_jwt_token),
     url(r"^api/", include(router.urls)),
     url(r"^api-auth/", include("rest_framework.urls", namespace="rest_framework"))
 ]
