@@ -12,9 +12,10 @@ from api.appointment.views import AppointmentViewSet
 from api.schedule.views import ScheduleViewSet
 from api.camera.views import CameraViewSet
 from api.collage.views import CollageViewSet
-
+from api.whoami.views import WhoAmIViewSet
 
 router = DefaultRouter()
+router.register(r"whoami", WhoAmIViewSet, "whoami")
 router.register(r"login", LoginViewSet, "login")
 router.register(r"logout", LogoutViewSet, "logout")
 router.register(r"users", UserViewSet, "users")

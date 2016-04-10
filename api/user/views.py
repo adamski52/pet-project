@@ -22,7 +22,6 @@ class UserAttachmentViewSet(BaseAttachmentViewSet):
         return UserAttachment.objects.filter(
             user = self.kwargs["user_id"])
 
-    
 
 
 class UserViewSet(BaseViewSet):
